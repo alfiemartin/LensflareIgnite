@@ -7,7 +7,7 @@
 import React from "react"
 import { useColorScheme, ViewStyle } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
-import { ChatScreen, ExplorerScreen, MatchesScreen, ProfileScreen } from "../screens"
+import { CameraScreen, ChatScreen, ExplorerScreen, MatchesScreen, ProfileScreen } from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
   createMaterialTopTabNavigator,
@@ -40,6 +40,7 @@ export type TabNavigatorParamList = {
   explorer: undefined
   matches: undefined
   test: undefined
+  camera: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -90,6 +91,11 @@ const AppTabBar = () => {
         options={{ tabBarIcon: ({ color }) => <TabIcon color={color} icon="ios-disc-outline" /> }}
       />
       <Tab.Screen
+        name="camera"
+        component={CameraScreen}
+        options={{ tabBarIcon: ({ color }) => <TabIcon color={color} icon="camera-outline" /> }}
+      />
+      <Tab.Screen
         name="matches"
         component={MatchesScreen}
         options={{
@@ -101,11 +107,6 @@ const AppTabBar = () => {
         component={ProfileScreen}
         options={{ tabBarIcon: ({ color }) => <TabIcon color={color} icon="person-outline" /> }}
       />
-      {/* <Tab.Screen
-        name="test"
-        component={TestScreen}
-        options={{ tabBarIcon: ({ color }) => <TabIcon color={color} icon="build-outline" /> }}
-      /> */}
     </Tab.Navigator>
   )
 }

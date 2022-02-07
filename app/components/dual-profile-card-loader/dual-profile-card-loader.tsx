@@ -35,13 +35,13 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
       cardId: 0,
       infront: true,
       counter: 0,
-      scale: useSharedValue(1).value,
+      scale: 1,
     },
     {
       cardId: 1,
       infront: false,
       counter: 1,
-      scale: useSharedValue(0.9).value,
+      scale: 0.9,
     },
   ]
   const [cardData, setCardData] = useState(initialCardState)

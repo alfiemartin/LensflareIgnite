@@ -5,20 +5,21 @@ import { DualProfileCardLoader, GradientBackground, Screen } from "../../compone
 import { color } from "../../theme"
 
 const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
+  backgroundColor: color.palette.fullBlack,
   flex: 1,
 }
 
 const CARD_CONTAINER: ViewStyle = {
-  backgroundColor: color.palette.deepPurple,
+  backgroundColor: color.background,
   flex: 1,
+  borderBottomLeftRadius: 20,
+  borderBottomRightRadius: 20,
 }
 
 export const ExplorerScreen = observer(function ExplorerScreen(props) {
   return (
-    <Screen style={ROOT}>
+    <Screen style={ROOT} statusBar="dark-content">
       <View style={CARD_CONTAINER}>
-        <GradientBackground colors={[color.palette.deepPurple, color.palette.black]} />
         <DualProfileCardLoader />
       </View>
     </Screen>

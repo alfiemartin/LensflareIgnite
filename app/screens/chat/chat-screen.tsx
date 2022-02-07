@@ -8,7 +8,7 @@ import { mockProfileCardData } from "../../../mockData"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
+  backgroundColor: color.palette.fullBlack,
   flex: 1,
 }
 

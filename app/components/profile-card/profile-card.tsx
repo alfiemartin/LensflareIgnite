@@ -1,7 +1,6 @@
-import * as React from "react"
+import React from "react"
 import { Dimensions, ImageBackground, StyleProp, View, ViewStyle, ImageStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { Text } from "../text/text"
 import { PanGestureHandler } from "react-native-gesture-handler"
 import Animated, {
   Easing,
@@ -16,6 +15,7 @@ import Animated, {
   WithTimingConfig,
 } from "react-native-reanimated"
 import { EasyIcon } from "../easy-icon/easy-icon"
+import { useEffect } from "react"
 
 export interface IUpdateCardUI {
   cardId: number
@@ -55,7 +55,7 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
     updateCardsUi,
     cardId,
     inFront,
-    scale,
+    scale: scaleVal,
     scaleBackCard,
     scaleFrontCard,
   } = props
@@ -66,6 +66,11 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
   const swipeTranslationX = useSharedValue(0)
   const swipeOpacity = useSharedValue(1)
   const swipeRotation = useSharedValue(0)
+  const scale = useSharedValue(scaleVal)
+
+  useEffect(() => {
+    scale.value = scaleVal
+  }, [scaleVal])
 
   const finishSwipeAnimation = () => {
     "worklet"
@@ -125,7 +130,7 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
           rotate: `${swipeRotation.value}deg`,
         },
         {
-          scale: withTiming(scale, { duration: 150, easing: Easing.out(Easing.ease) }),
+          scale: withTiming(scale.value, { duration: 150, easing: Easing.out(Easing.ease) }),
         },
       ],
       opacity: swipeOpacity.value,
@@ -160,10 +165,6 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
   const bringNewCard = () => {
     swipeOpacity.value = withTiming(1, instantTiming)
   }
-
-  React.useEffect(() => {
-    console.tron.log("profile rendered")
-  })
 
   return (
     <PanGestureHandler onGestureEvent={gestureHandler} onEnded={onEnd}>

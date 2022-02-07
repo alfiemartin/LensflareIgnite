@@ -16,7 +16,7 @@ const CONTAINER: ViewStyle = {
 const TEXT: TextStyle = {
   fontFamily: typography.primary,
   fontSize: 20,
-  color: color.primary,
+  color: color.palette.white,
 }
 
 const IMAGE_BACKGROUND: ViewStyle = {
@@ -52,7 +52,7 @@ export const ImageBox = observer(function ImageBox(props: ImageBoxProps) {
           source={{ uri: image }}
         >
           <GradientBackground
-            style={{ borderRadius: BORDER_RADIUS, transform: [{ scale: 1.1 }] }}
+            style={{ borderRadius: BORDER_RADIUS }}
             colors={["transparent", color.palette.transBlack]}
             start={[0, 0.6]}
             end={[0, 1]}
