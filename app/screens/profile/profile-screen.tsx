@@ -1,7 +1,7 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { ScrollView, TextStyle, View, ViewStyle } from "react-native"
-import { EasyIcon, ImageBox, Screen, Text } from "../../components"
+import { ImageStyle, ScrollView, TextStyle, View, ViewStyle } from "react-native"
+import { EasyIcon, GradientBackground, ImageBox, ProfileIcon, Screen, Text } from "../../components"
 import { color, spacing } from "../../theme"
 import { useStores } from "../../models"
 import { Col, Grid } from "react-native-easy-grid"
@@ -15,25 +15,29 @@ const PROFILE_CONTAINER: ViewStyle = {
   flex: 1,
   backgroundColor: color.background,
   paddingHorizontal: spacing[3],
-  borderBottomLeftRadius: 20,
-  borderBottomRightRadius: 20,
+
+  borderRadius: 20,
 }
 
 const HEADER: ViewStyle = {
   flexDirection: "row",
   justifyContent: "space-between",
+  paddingVertical: spacing[4],
+  paddingHorizontal: spacing[3],
+}
+
+const HEADER_LEFT: ViewStyle = {
+  flexDirection: "row",
 }
 
 const SCROLL_VIEW: ViewStyle = {
   flex: 1,
+  paddingTop: spacing[4],
 }
 
-const TEXT: TextStyle = {
-  textAlign: "center",
-  alignSelf: "center",
-  fontSize: 24,
-  fontWeight: "bold",
-  marginTop: 2,
+const HEADER_ICON: ImageStyle = {
+  borderColor: color.palette.orange,
+  borderWidth: 2,
 }
 
 export const ProfileScreen = observer(function ProfileScreen() {
@@ -42,11 +46,15 @@ export const ProfileScreen = observer(function ProfileScreen() {
 
   return (
     <Screen style={ROOT}>
-      <View style={PROFILE_CONTAINER}>
-        <View style={HEADER}>
-          <Text preset="default" text="Alfie" style={TEXT} />
-          <EasyIcon name="settings-sharp" size={40} color={color.primary} />
+      <View>
+        <View style={[HEADER, { backgroundColor: "black" }]}>
+          <View style={HEADER_LEFT}>
+            <ProfileIcon imageStyles={HEADER_ICON} size={55} image={profiles[0].image} />
+          </View>
+          <EasyIcon name="settings-sharp" size={40} color={color.palette.almostWhite} />
         </View>
+      </View>
+      <View style={PROFILE_CONTAINER}>
         <ScrollView style={SCROLL_VIEW}>
           <Grid>
             <Col style={{ marginRight: 5 }}>

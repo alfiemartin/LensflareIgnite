@@ -25,19 +25,20 @@ export interface ProfileIconProps {
   style?: StyleProp<ViewStyle>
   image: string
   size?: number
+  imageStyles?: StyleProp<ImageStyle>
 }
 
 /**
  * Describe your component here
  */
 export const ProfileIcon = observer(function ProfileIcon(props: ProfileIconProps) {
-  const { style, image, size = 70 } = props
+  const { style, image, size = 70, imageStyles } = props
   const styles = Object.assign({}, CONTAINER, style)
-  const imageStyle = Object.assign({}, PROFILE_IMAGE, { width: size, height: size })
+  const imageStyle = Object.assign({}, PROFILE_IMAGE, imageStyles)
 
   return (
     <View style={styles}>
-      <Image source={{ uri: image }} style={imageStyle} />
+      <Image source={{ uri: image }} style={[imageStyle, { width: size, height: size }]} />
     </View>
   )
 })

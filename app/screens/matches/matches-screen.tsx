@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
 import { ChatPreview, EasyIcon, ProfileIcon, Screen, Text } from "../../components"
 import { color, spacing } from "../../theme"
-import { FlatList } from "react-native-gesture-handler"
+import { FlatList, ScrollView } from "react-native-gesture-handler"
 import { useStores } from "../../models"
 
 const ROOT: ViewStyle = {
@@ -23,13 +23,15 @@ const ROUNDED_BOTTOM_CONTAINER: ViewStyle = {
   overflow: "hidden",
   borderBottomLeftRadius: 20,
   borderBottomRightRadius: 20,
+  borderRadius: 20,
 }
 
 const TOP_BAR: ViewStyle = {
   flexDirection: "row",
   alignItems: "center",
   padding: spacing[2],
-  backgroundColor: color.palette.tailwind.sky50,
+  paddingVertical: spacing[3],
+  backgroundColor: color.palette.fullBlack,
 }
 
 const NEWCHAT_CONTAINER: ViewStyle = {
@@ -53,33 +55,30 @@ export const MatchesScreen = observer(function MatchesScreen() {
   return (
     <Screen style={ROOT}>
       <View style={MATCHES_CONTAINER}>
-        <View style={ROUNDED_BOTTOM_CONTAINER}>
-          <View style={TOP_BAR}>
-            <View style={NEWCHAT_CONTAINER}>
-              <EasyIcon name="add" size={50} color={color.palette.white} />
-            </View>
-            <View style={TOP_BAR_PROFILES}>
-              {profiles
-                .filter((x) => x.id < 3)
-                .map((profile) => {
-                  return (
-                    <ProfileIcon
-                      style={{ marginLeft: spacing[3] }}
-                      key={profile.id}
-                      image={profile.image}
-                      size={65}
-                    />
-                  )
-                })}
-            </View>
+        <View style={TOP_BAR}>
+          <View style={NEWCHAT_CONTAINER}>
+            <EasyIcon name="add" size={50} color={color.palette.white} />
           </View>
-          <FlatList
-            data={profiles}
-            renderItem={({ item, index }) => {
-              return <ChatPreview key={index} name={item.name} image={item.image} />
-            }}
-          />
+          <View style={TOP_BAR_PROFILES}>
+            {profiles
+              .filter((x) => x.id < 3)
+              .map((profile) => {
+                return (
+                  <ProfileIcon
+                    style={{ marginLeft: spacing[3] }}
+                    key={profile.id}
+                    image={profile.image}
+                    size={65}
+                  />
+                )
+              })}
+          </View>
         </View>
+        <ScrollView style={ROUNDED_BOTTOM_CONTAINER}>
+          {profiles.map(({ image, id, name }, i) => {
+            return <ChatPreview key={id} name={name} image={image} />
+          })}
+        </ScrollView>
       </View>
     </Screen>
   )

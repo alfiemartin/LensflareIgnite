@@ -10,6 +10,7 @@ export const palette = {
   lighterGrey: "#CDD4DA",
   angry: "#dd3333",
   deepPurple: "#5D2555",
+  blue: "#2563eb",
   almostWhite: "#f1f5f9",
   tailwind: {
     sky50: "#f0f9ff",
