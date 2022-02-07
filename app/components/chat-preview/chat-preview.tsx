@@ -5,6 +5,7 @@ import { color, spacing, typography } from "../../theme"
 import { Text } from "../text/text"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { useNavigation } from "@react-navigation/native"
+import { EasyIcon, ProfileIcon } from ".."
 
 const CONTAINER: ViewStyle = {
   flexDirection: "row",
@@ -13,17 +14,11 @@ const CONTAINER: ViewStyle = {
   padding: spacing[1],
 }
 
-const PROFILE_IMAGE: ImageStyle = {
-  width: 60,
-  height: 60,
-  borderRadius: 5,
-}
-
 const NAME: TextStyle = {
   fontFamily: typography.primary,
-  fontSize: 18,
-  fontWeight: "bold",
+  fontSize: 22,
   color: color.primary,
+  marginBottom: spacing[2],
 }
 
 const PREVIEW_TEXT: TextStyle = {
@@ -34,9 +29,14 @@ const PREVIEW_TEXT: TextStyle = {
 
 const TEXT_CONTAINER: ViewStyle = {
   flex: 1,
-  marginLeft: spacing[1],
-  justifyContent: "space-between",
+  marginLeft: spacing[2],
   paddingVertical: spacing[1],
+}
+
+const NEW_MSG_INDICATOR: ViewStyle = {
+  position: "absolute",
+  top: "50%",
+  right: 10,
 }
 
 export interface ChatPreviewProps {
@@ -60,11 +60,12 @@ export const ChatPreview = observer(function ChatPreview(props: ChatPreviewProps
   return (
     <TouchableOpacity onPress={() => navigation.navigate("chat" as any)}>
       <View style={styles}>
-        <Image source={{ uri: image }} style={PROFILE_IMAGE} />
+        <ProfileIcon image={image} />
         <View style={TEXT_CONTAINER}>
           <Text style={NAME}>{name}</Text>
           <Text style={PREVIEW_TEXT}>Hey wys g</Text>
         </View>
+        <EasyIcon style={NEW_MSG_INDICATOR} name="ellipse" size={10} />
       </View>
     </TouchableOpacity>
   )

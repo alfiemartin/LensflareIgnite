@@ -9,6 +9,7 @@ import {
 } from "react-native"
 import { observer } from "mobx-react-lite"
 import Icon from "react-native-vector-icons/Ionicons"
+import { color as themeColor } from "../../theme/color"
 
 const CONTAINER: ViewStyle = {
   justifyContent: "center",
@@ -39,11 +40,11 @@ export const TabIcon = ({ color, icon }: TabIconProps) => {
  * Describe your component here
  */
 export const EasyIcon = observer(function EasyIcon(props: EasyIconProps) {
-  const { style, name, size = 30, onPress, color = "black" } = props
+  const { style, name, size = 30, onPress, color = themeColor.palette.fullBlack } = props
   const styles = Object.assign({}, CONTAINER, style)
 
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity style={styles} onPress={onPress}>
       <Icon name={name} size={size} color={color} />
     </TouchableOpacity>
   )

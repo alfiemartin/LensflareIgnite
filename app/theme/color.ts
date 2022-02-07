@@ -23,7 +23,7 @@ export const color = {
   /**
    * The screen background.
    */
-  background: palette.almostWhite,
+  background: palette.tailwind.sky50,
   /**
    * The main tinting color.
    */

@@ -11,4 +11,7 @@ export const palette = {
   angry: "#dd3333",
   deepPurple: "#5D2555",
   almostWhite: "#f1f5f9",
+  tailwind: {
+    sky50: "#f0f9ff",
+  },
 }
