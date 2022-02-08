@@ -6,7 +6,7 @@ import { Text } from "../text/text"
 
 const CONTAINER: ViewStyle = {
   justifyContent: "center",
-  flex: 1,
+  flex: 6,
 }
 
 const PROFILE_CONTAINER: ViewStyle = {

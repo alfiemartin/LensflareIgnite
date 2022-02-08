@@ -20,9 +20,10 @@ const ROOT: ViewStyle = {
 }
 
 const HEADER: ViewStyle = {
+  flex: 1,
   flexDirection: "row",
   justifyContent: "space-between",
-  paddingVertical: spacing[4],
+  paddingVertical: spacing[2],
   paddingHorizontal: spacing[3],
 }
 

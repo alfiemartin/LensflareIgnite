@@ -1,5 +1,14 @@
 import React from "react"
-import { Dimensions, ImageBackground, StyleProp, View, ViewStyle, ImageStyle } from "react-native"
+import {
+  Dimensions,
+  ImageBackground,
+  StyleProp,
+  View,
+  ViewStyle,
+  ImageStyle,
+  TextInput,
+  TextStyle,
+} from "react-native"
 import { observer } from "mobx-react-lite"
 import { PanGestureHandler } from "react-native-gesture-handler"
 import Animated, {
@@ -16,6 +25,7 @@ import Animated, {
 } from "react-native-reanimated"
 import { EasyIcon } from "../easy-icon/easy-icon"
 import { useEffect } from "react"
+import { color, spacing } from "../../theme"
 
 export interface IUpdateCardUI {
   cardId: number
@@ -40,6 +50,52 @@ export interface ProfileCardProps {
 }
 
 type TSwipeDirection = "left" | "right"
+
+const CONTAINER: ViewStyle = {
+  flex: 1,
+  position: "absolute",
+  left: 0,
+  right: 0,
+  top: 0,
+  bottom: 0,
+}
+
+const MAIN_IMAGE_CONTAINER: ViewStyle = {
+  flex: 1,
+  justifyContent: "space-between",
+  backgroundColor: "#fbcfe8",
+  borderTopLeftRadius: 20,
+  borderTopRightRadius: 20,
+}
+
+const MAIN_IMAGE: ImageStyle = {
+  flex: 1,
+  justifyContent: "space-between",
+  backgroundColor: "#fce7f3",
+}
+
+const CHOICES_CONTAINER: ViewStyle = {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  backgroundColor: "#fce7f3",
+  padding: 10,
+  borderBottomLeftRadius: 20,
+  borderBottomRightRadius: 20,
+}
+
+const INPUT_WRAPPER: ViewStyle = {
+  flex: 1,
+  padding: spacing[1],
+  paddingLeft: spacing[5],
+  backgroundColor: color.palette.fullBlack,
+  borderRadius: 20,
+  marginRight: spacing[3],
+}
+
+const INPUT: TextStyle = {
+  flex: 1,
+  color: color.palette.almostWhite,
+}
 
 const aSwipeConfig: WithTimingConfig = {
   duration: 300,
@@ -174,18 +230,12 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
           source={{ uri: data && data.image }}
           style={MAIN_IMAGE_CONTAINER}
           imageStyle={MAIN_IMAGE}
-        >
-          {/* <Animated.View style={SWIPE_IND_CONTAINER}>
-            <Text style={[{ zIndex: 1000, fontSize: 200 }]}>❤️</Text>
-          </Animated.View>
-          <Animated.View style={SWIPE_IND_CONTAINER}>
-            <Text style={[{ zIndex: 1000, fontSize: 200 }]}>❌</Text>
-          </Animated.View> */}
-        </ImageBackground>
+        ></ImageBackground>
         {data && (
           <View style={CHOICES_CONTAINER}>
-            <EasyIcon size={40} name="ios-close-circle" onPress={() => swipeInDirection("left")} />
-            <EasyIcon size={40} name="ios-heart-half" />
+            <View style={INPUT_WRAPPER}>
+              <TextInput style={INPUT} />
+            </View>
             <EasyIcon size={40} name="heart" onPress={() => swipeInDirection("right")} />
           </View>
         )}
@@ -194,61 +244,4 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
   )
 })
 
-const CONTAINER: ViewStyle = {
-  flex: 1,
-  position: "absolute",
-  padding: 20,
-  left: 0,
-  right: 0,
-  top: 0,
-  bottom: 0,
-  overflow: "hidden",
-  borderRadius: 20,
-  shadowColor: "#000",
-  shadowOffset: {
-    width: 0,
-    height: 2,
-  },
-  shadowOpacity: 0.25,
-  shadowRadius: 3.84,
-  elevation: 5,
-}
-
-const MAIN_IMAGE_CONTAINER: ViewStyle = {
-  flex: 1,
-  justifyContent: "space-between",
-  backgroundColor: "#fbcfe8",
-  borderTopLeftRadius: 20,
-  borderTopRightRadius: 20,
-}
-
-const MAIN_IMAGE: ImageStyle = {
-  margin: 2,
-  flex: 1,
-  justifyContent: "space-between",
-  backgroundColor: "#fce7f3",
-  borderTopLeftRadius: 20,
-  borderTopRightRadius: 20,
-}
-
-const CHOICES_CONTAINER: ViewStyle = {
-  flexDirection: "row",
-  justifyContent: "space-between",
-  backgroundColor: "#fce7f3",
-  padding: 10,
-  borderBottomLeftRadius: 20,
-  borderBottomRightRadius: 20,
-}
-
-const SWIPE_IND_CONTAINER: ViewStyle = {
-  position: "absolute",
-  display: "none",
-  left: 0,
-  right: 0,
-  top: 0,
-  bottom: 0,
-  flex: 1,
-  justifyContent: "center",
-  alignItems: "center",
-  zIndex: 1000,
-}
+//LET PEOPLE DRAW OVER THE IMAGE

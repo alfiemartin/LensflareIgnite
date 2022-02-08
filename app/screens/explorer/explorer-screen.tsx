@@ -1,7 +1,7 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
-import { DualProfileCardLoader, GradientBackground, Screen } from "../../components"
+import { DualProfileCardLoader, Screen } from "../../components"
 import { color } from "../../theme"
 
 const ROOT: ViewStyle = {

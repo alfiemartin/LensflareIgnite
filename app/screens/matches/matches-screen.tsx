@@ -11,16 +11,11 @@ const ROOT: ViewStyle = {
   flex: 1,
 }
 
-const MATCHES_CONTAINER: ViewStyle = {
-  flex: 1,
-  backgroundColor: color.background,
-}
-
 const TOP_BAR: ViewStyle = {
+  flex: 1,
   flexDirection: "row",
   alignItems: "center",
   padding: spacing[2],
-  paddingVertical: spacing[3],
   backgroundColor: color.palette.fullBlack,
 }
 
@@ -64,7 +59,7 @@ export const MatchesScreen = observer(function MatchesScreen() {
         </View>
       </View>
       <CurvedScreenBox>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           {profiles.map(({ image, id, name }, i) => {
             return <ChatPreview key={id} name={name} image={image} />
           })}
