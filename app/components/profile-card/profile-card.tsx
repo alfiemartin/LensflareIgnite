@@ -8,6 +8,8 @@ import {
   ImageStyle,
   TextInput,
   TextStyle,
+  NativeSyntheticEvent,
+  TextInputContentSizeChangeEventData,
 } from "react-native"
 import { observer } from "mobx-react-lite"
 import { PanGestureHandler } from "react-native-gesture-handler"
@@ -26,6 +28,7 @@ import Animated, {
 import { EasyIcon } from "../easy-icon/easy-icon"
 import { useEffect } from "react"
 import { color, spacing } from "../../theme"
+import { CardFooter } from "../card-footer/card-footer"
 
 export interface IUpdateCardUI {
   cardId: number
@@ -45,6 +48,7 @@ export interface ProfileCardProps {
   cardId: number
   inFront: boolean
   scale: number
+  translationX: number
   scaleBackCard?: (scale: number) => void
   scaleFrontCard?: (scale: number) => void
 }
@@ -74,29 +78,6 @@ const MAIN_IMAGE: ImageStyle = {
   backgroundColor: "#fce7f3",
 }
 
-const CHOICES_CONTAINER: ViewStyle = {
-  flexDirection: "row",
-  justifyContent: "space-between",
-  backgroundColor: "#fce7f3",
-  padding: 10,
-  borderBottomLeftRadius: 20,
-  borderBottomRightRadius: 20,
-}
-
-const INPUT_WRAPPER: ViewStyle = {
-  flex: 1,
-  padding: spacing[1],
-  paddingLeft: spacing[5],
-  backgroundColor: color.palette.fullBlack,
-  borderRadius: 20,
-  marginRight: spacing[3],
-}
-
-const INPUT: TextStyle = {
-  flex: 1,
-  color: color.palette.almostWhite,
-}
-
 const aSwipeConfig: WithTimingConfig = {
   duration: 300,
 }
@@ -112,6 +93,7 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
     cardId,
     inFront,
     scale: scaleVal,
+    translationX: transXVal,
     scaleBackCard,
     scaleFrontCard,
   } = props
@@ -123,6 +105,7 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
   const swipeOpacity = useSharedValue(1)
   const swipeRotation = useSharedValue(0)
   const scale = useSharedValue(scaleVal)
+  const translationX = useSharedValue(transXVal)
 
   useEffect(() => {
     scale.value = scaleVal
@@ -188,6 +171,9 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
         {
           scale: withTiming(scale.value, { duration: 150, easing: Easing.out(Easing.ease) }),
         },
+        {
+          translateX: withTiming(translationX.value),
+        },
       ],
       opacity: swipeOpacity.value,
     }
@@ -231,14 +217,7 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
           style={MAIN_IMAGE_CONTAINER}
           imageStyle={MAIN_IMAGE}
         ></ImageBackground>
-        {data && (
-          <View style={CHOICES_CONTAINER}>
-            <View style={INPUT_WRAPPER}>
-              <TextInput style={INPUT} />
-            </View>
-            <EasyIcon size={40} name="heart" onPress={() => swipeInDirection("right")} />
-          </View>
-        )}
+        {data && <CardFooter />}
       </Animated.View>
     </PanGestureHandler>
   )

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Image, StyleProp, View, ViewStyle } from "react-native"
+import { Dimensions, Image, StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { ProfileCard } from ".."
 import { useStores } from "../../models"
@@ -30,18 +30,22 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
   const { profileCardStore } = useStores()
   const { profiles } = profileCardStore
 
+  const screenWidth = Dimensions.get("screen").width
+
   const initialCardState = [
     {
       cardId: 0,
       infront: true,
       counter: 0,
       scale: 1,
+      translationX: 0,
     },
     {
       cardId: 1,
       infront: false,
       counter: 1,
       scale: 0.9,
+      translationX: screenWidth,
     },
   ]
   const [cardData, setCardData] = useState(initialCardState)
@@ -72,6 +76,7 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
         return {
           ...card,
           scale: !card.infront ? scale : card.scale,
+          translationX: !card.infront ? 0 : card.translationX,
         }
       })
     })
@@ -99,6 +104,7 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
             inFront={card.infront}
             updateCardsUi={updateCardUi}
             scale={card.scale}
+            translationX={card.translationX}
             scaleBackCard={scaleBackCard}
             scaleFrontCard={scaleFrontCard}
           />
