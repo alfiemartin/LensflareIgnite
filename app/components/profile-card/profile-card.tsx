@@ -1,16 +1,5 @@
 import React from "react"
-import {
-  Dimensions,
-  ImageBackground,
-  StyleProp,
-  View,
-  ViewStyle,
-  ImageStyle,
-  TextInput,
-  TextStyle,
-  NativeSyntheticEvent,
-  TextInputContentSizeChangeEventData,
-} from "react-native"
+import { Dimensions, ImageBackground, StyleProp, View, ViewStyle, ImageStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { PanGestureHandler } from "react-native-gesture-handler"
 import Animated, {
@@ -25,9 +14,7 @@ import Animated, {
   withTiming,
   WithTimingConfig,
 } from "react-native-reanimated"
-import { EasyIcon } from "../easy-icon/easy-icon"
 import { useEffect } from "react"
-import { color, spacing } from "../../theme"
 import { CardFooter } from "../card-footer/card-footer"
 
 export interface IUpdateCardUI {
@@ -49,11 +36,9 @@ export interface ProfileCardProps {
   inFront: boolean
   scale: number
   translationX: number
-  scaleBackCard?: (scale: number) => void
-  scaleFrontCard?: (scale: number) => void
+  scaleBackCard?: (translationX: number) => void
+  scaleFrontCard?: (translationX: number) => void
 }
-
-type TSwipeDirection = "left" | "right"
 
 const CONTAINER: ViewStyle = {
   flex: 1,
@@ -102,8 +87,6 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
   const screenWidth = Dimensions.get("screen").width
 
   const swipeTranslationX = useSharedValue(0)
-  const swipeOpacity = useSharedValue(1)
-  const swipeRotation = useSharedValue(0)
   const scale = useSharedValue(scaleVal)
   const translationX = useSharedValue(transXVal)
 
@@ -111,29 +94,15 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
     scale.value = scaleVal
   }, [scaleVal])
 
+  useEffect(() => {
+    translationX.value = transXVal
+  }, [transXVal])
+
   const finishSwipeAnimation = () => {
     "worklet"
     const right = swipeTranslationX.value > 0
 
-    swipeTranslationX.value = withSequence(
-      withTiming(
-        right ? screenWidth * 1.5 : -screenWidth * 1.5,
-        {
-          duration: 200,
-        },
-        () => runOnJS(scaleFrontCard)(0.9),
-      ),
-      withTiming(0, instantTiming, () => {
-        if (updateCardsUi) runOnJS(updateCardsUi)()
-      }),
-    )
-
-    swipeOpacity.value = withDelay(200, withTiming(0, instantTiming))
-
-    swipeRotation.value = withSequence(
-      withTiming(right ? 45 : -45, { duration: 200 }),
-      withTiming(0, instantTiming),
-    )
+    updateCardsUi(cardId)
   }
 
   const gestureHandler = useAnimatedGestureHandler({
@@ -141,76 +110,44 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
       if (!inFront) return
 
       swipeTranslationX.value = event.translationX
-      swipeRotation.value = interpolate(event.translationX, [0, screenWidth], [0, 45])
 
-      runOnJS(scaleBackCard)(interpolate(Math.abs(event.translationX), [0, screenWidth], [0.9, 1]))
+      runOnJS(scaleBackCard)(
+        interpolate(Math.abs(event.translationX), [0, screenWidth], [-screenWidth, 0]),
+      )
     },
   })
 
   const onEnd = () => {
     if (!inFront) return
+
+    swipeTranslationX.value = 0
+
     if (Math.abs(swipeTranslationX.value) > 100) {
       finishSwipeAnimation()
-      runOnJS(scaleBackCard)(1)
+      runOnJS(scaleBackCard)(0)
+      runOnJS(scaleFrontCard)(-screenWidth)
       return
     }
-    runOnJS(scaleBackCard)(0.9)
-    swipeTranslationX.value = withTiming(0, aSwipeConfig)
-    swipeRotation.value = withTiming(0, aSwipeConfig)
+    runOnJS(scaleBackCard)(-screenWidth)
   }
 
   const aSwipeStyles = useAnimatedStyle(() => {
     return {
       transform: [
         {
-          translateX: swipeTranslationX.value,
-        },
-        {
-          rotate: `${swipeRotation.value}deg`,
-        },
-        {
-          scale: withTiming(scale.value, { duration: 150, easing: Easing.out(Easing.ease) }),
-        },
-        {
-          translateX: withTiming(translationX.value),
+          translateX: translationX.value,
         },
       ],
-      opacity: swipeOpacity.value,
     }
   })
 
-  const swipeInDirection = (direction: TSwipeDirection) => {
-    const right = direction === "right"
-    if (!inFront) return
-
-    swipeTranslationX.value = withSequence(
-      withTiming((right ? screenWidth : -screenWidth) * 1.3, { duration: 300 }, () =>
-        runOnJS(scaleFrontCard)(0.9),
-      ),
-      withTiming(0, instantTiming, () => {
-        if (updateCardsUi) {
-          runOnJS(updateCardsUi)(cardId)
-        }
-      }),
-    )
-
-    scaleBackCard(1)
-
-    swipeRotation.value = withSequence(
-      withTiming(right ? 45 : -45, { duration: 300 }),
-      withTiming(0, instantTiming),
-    )
-
-    swipeOpacity.value = withDelay(300, withTiming(0, instantTiming))
-  }
-
   const bringNewCard = () => {
-    swipeOpacity.value = withTiming(1, instantTiming)
+    // swipeOpacity.value = withTiming(1, instantTiming)
   }
 
   return (
     <PanGestureHandler onGestureEvent={gestureHandler} onEnded={onEnd}>
-      <Animated.View style={[CONTAINER, styles, aSwipeStyles, { zIndex: inFront ? 10 : 5 }]}>
+      <Animated.View style={[CONTAINER, styles, aSwipeStyles, { zIndex: !inFront ? 10 : 5 }]}>
         <ImageBackground
           onLoad={bringNewCard}
           source={{ uri: data && data.image }}

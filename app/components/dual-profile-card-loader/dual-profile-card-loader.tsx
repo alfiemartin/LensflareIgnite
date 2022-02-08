@@ -4,7 +4,6 @@ import { observer } from "mobx-react-lite"
 import { ProfileCard } from ".."
 import { useStores } from "../../models"
 import { useEffect, useState } from "react"
-import { useSharedValue } from "react-native-reanimated"
 
 const CONTAINER: ViewStyle = {
   justifyContent: "flex-end",
@@ -45,7 +44,7 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
       infront: false,
       counter: 1,
       scale: 0.9,
-      translationX: screenWidth,
+      translationX: -screenWidth,
     },
   ]
   const [cardData, setCardData] = useState(initialCardState)
@@ -70,24 +69,23 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
     })
   }
 
-  const scaleBackCard = (scale: number) => {
+  const scaleBackCard = (translationX: number) => {
     setCardData((oldData) => {
       return oldData.map((card) => {
         return {
           ...card,
-          scale: !card.infront ? scale : card.scale,
-          translationX: !card.infront ? 0 : card.translationX,
+          translationX: !card.infront ? translationX : card.translationX,
         }
       })
     })
   }
 
-  const scaleFrontCard = (scale: number) => {
+  const scaleFrontCard = (translationX: number) => {
     setCardData((oldData) => {
       return oldData.map((card) => {
         return {
           ...card,
-          scale: card.infront ? scale : card.scale,
+          translationX: card.infront ? translationX : card.translationX,
         }
       })
     })
