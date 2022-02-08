@@ -1,7 +1,15 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { ImageStyle, ScrollView, TextStyle, View, ViewStyle } from "react-native"
-import { EasyIcon, GradientBackground, ImageBox, ProfileIcon, Screen, Text } from "../../components"
+import {
+  CurvedScreenBox,
+  EasyIcon,
+  GradientBackground,
+  ImageBox,
+  ProfileIcon,
+  Screen,
+  Text,
+} from "../../components"
 import { color, spacing } from "../../theme"
 import { useStores } from "../../models"
 import { Col, Grid } from "react-native-easy-grid"
@@ -9,14 +17,6 @@ import { Col, Grid } from "react-native-easy-grid"
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.fullBlack,
   flex: 1,
-}
-
-const PROFILE_CONTAINER: ViewStyle = {
-  flex: 1,
-  backgroundColor: color.background,
-  paddingHorizontal: spacing[3],
-
-  borderRadius: 20,
 }
 
 const HEADER: ViewStyle = {
@@ -46,15 +46,13 @@ export const ProfileScreen = observer(function ProfileScreen() {
 
   return (
     <Screen style={ROOT}>
-      <View>
-        <View style={[HEADER, { backgroundColor: "black" }]}>
-          <View style={HEADER_LEFT}>
-            <ProfileIcon imageStyles={HEADER_ICON} size={55} image={profiles[0].image} />
-          </View>
-          <EasyIcon name="settings-sharp" size={40} color={color.palette.almostWhite} />
+      <View style={[HEADER, { backgroundColor: "black" }]}>
+        <View style={HEADER_LEFT}>
+          <ProfileIcon imageStyles={HEADER_ICON} size={55} image={profiles[0].image} />
         </View>
+        <EasyIcon name="settings-sharp" size={40} color={color.palette.almostWhite} />
       </View>
-      <View style={PROFILE_CONTAINER}>
+      <CurvedScreenBox>
         <ScrollView style={SCROLL_VIEW}>
           <Grid>
             <Col style={{ marginRight: 5 }}>
@@ -66,7 +64,7 @@ export const ProfileScreen = observer(function ProfileScreen() {
           </Grid>
           <ImageBox image={profiles[2].image} text="My Profile" />
         </ScrollView>
-      </View>
+      </CurvedScreenBox>
     </Screen>
   )
 })
