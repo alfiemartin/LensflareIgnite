@@ -1,9 +1,16 @@
 import * as React from "react"
 import { Dimensions, Image, StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { ProfileCard } from ".."
+import { CardFooter, ProfileCard, TState } from ".."
 import { useStores } from "../../models"
 import { useEffect, useState } from "react"
+import { PanGestureHandler } from "react-native-gesture-handler"
+import Animated, {
+  interpolate,
+  runOnJS,
+  useAnimatedGestureHandler,
+  withTiming,
+} from "react-native-reanimated"
 
 const CONTAINER: ViewStyle = {
   justifyContent: "flex-end",
@@ -15,6 +22,12 @@ export interface DualProfileCardLoaderProps {
    * An optional style override useful for padding & margin.
    */
   style?: StyleProp<ViewStyle>
+}
+
+export interface ICardState {
+  counter: number
+  translationX: number
+  state: TState
 }
 
 /**
@@ -31,83 +44,156 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
 
   const screenWidth = Dimensions.get("screen").width
 
-  const initialCardState = [
+  const initialCardState: ICardState[] = [
     {
-      cardId: 0,
-      infront: true,
       counter: 0,
-      scale: 1,
-      translationX: 0,
+      translationX: -screenWidth,
+      state: "PREV",
     },
     {
-      cardId: 1,
-      infront: false,
       counter: 1,
-      scale: 0.9,
-      translationX: -screenWidth,
+      translationX: 0,
+      state: "CURRENT",
+    },
+    {
+      counter: 2,
+      translationX: screenWidth,
+      state: "NEXT",
     },
   ]
   const [cardData, setCardData] = useState(initialCardState)
 
-  const updateCardUi = () => {
-    setCardData((oldData) => {
-      const noMoreProfiles = oldData.some(({ counter }) => {
-        return counter >= profiles.length - 2
-      })
+  const bringNewCard = (state: TState) => {
+    setCardData((prevData) => {
+      return prevData.map((card) => {
+        if (card.state == "PREV" && state == "PREV") {
+          return {
+            ...card,
+            translationX: withTiming(0),
+          }
+        }
 
-      if (noMoreProfiles) {
-        return initialCardState
+        if (card.state == "NEXT" && state == "NEXT") {
+          return {
+            ...card,
+            translationX: withTiming(0),
+          }
+        }
+
+        return card
+      })
+    })
+
+    setTimeout(() => {
+      setCardData((prevData) => {
+        return prevData.map((card) => {
+          if (state == "PREV") {
+            if (card.state == "PREV") {
+              return { ...card, state: "CURRENT" }
+            } else if (card.state == "NEXT") {
+              return { ...card, state: "" }
+            }
+
+            return { ...card, state: "CURRENT" }
+          }
+
+          return card
+        })
+      })
+    }, 300)
+  }
+
+  const translatePrevCard = (translationX: number) => {
+    setCardData((prevData) => {
+      return prevData.map((card) => {
+        if (card.state == "PREV") {
+          return {
+            ...card,
+            translationX: interpolate(translationX, [0, screenWidth], [-screenWidth, 0]),
+          }
+        }
+
+        return card
+      })
+    })
+  }
+
+  const translateNextCard = (translationX: number) => {
+    setCardData((prevData) => {
+      return prevData.map((card) => {
+        if (card.state == "NEXT") {
+          return {
+            ...card,
+            translationX: interpolate(translationX, [0, -screenWidth], [screenWidth, 0]),
+          }
+        }
+
+        return card
+      })
+    })
+  }
+
+  const translateCardsToDefault = () => {
+    setCardData((prevData) => {
+      return prevData.map((card) => {
+        switch (card.state) {
+          case "PREV":
+            return {
+              ...card,
+              translationX: withTiming(-screenWidth),
+            }
+          case "NEXT":
+            return {
+              ...card,
+              translationX: withTiming(screenWidth),
+            }
+          default:
+            return card
+        }
+      })
+    })
+  }
+
+  const gestureHandler = useAnimatedGestureHandler({
+    onActive: (event, ctx: { transX: number }) => {
+      ctx.transX = event.translationX
+
+      if (event.translationX > 0) {
+        runOnJS(translatePrevCard)(event.translationX)
+      } else if (event.translationX) {
+        runOnJS(translateNextCard)(event.translationX)
+      }
+    },
+    onEnd: (_, ctx) => {
+      if (ctx.transX > 150) {
+        runOnJS(bringNewCard)("PREV")
+        return
+      } else if (ctx.transX < -150) {
+        runOnJS(bringNewCard)("NEXT")
+        return
       }
 
-      return oldData.map((card) => {
-        return {
-          ...card,
-          infront: !card.infront,
-          counter: card.infront ? card.counter + 2 : card.counter,
-        }
-      })
-    })
-  }
-
-  const scaleBackCard = (translationX: number) => {
-    setCardData((oldData) => {
-      return oldData.map((card) => {
-        return {
-          ...card,
-          translationX: !card.infront ? translationX : card.translationX,
-        }
-      })
-    })
-  }
-
-  const scaleFrontCard = (translationX: number) => {
-    setCardData((oldData) => {
-      return oldData.map((card) => {
-        return {
-          ...card,
-          translationX: card.infront ? translationX : card.translationX,
-        }
-      })
-    })
-  }
+      runOnJS(translateCardsToDefault)()
+    },
+  })
 
   return (
     <View style={styles}>
-      {cardData.map((card) => {
-        return (
-          <ProfileCard
-            key={card.cardId}
-            data={profiles[card.counter]}
-            cardId={card.cardId}
-            inFront={card.infront}
-            updateCardsUi={updateCardUi}
-            scale={card.scale}
-            translationX={card.translationX}
-            scaleBackCard={scaleBackCard}
-            scaleFrontCard={scaleFrontCard}
-          />
-        )
-      })}
+      <PanGestureHandler onGestureEvent={gestureHandler}>
+        <Animated.View style={{ flex: 1 }}>
+          {cardData.map((card, i) => {
+            return (
+              <ProfileCard
+                key={i}
+                data={profiles[card.counter]}
+                translationX={card.translationX}
+                state={card.state}
+              />
+            )
+          })}
+        </Animated.View>
+      </PanGestureHandler>
+      <CardFooter />
     </View>
   )
 })
