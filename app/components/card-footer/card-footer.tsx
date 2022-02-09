@@ -12,6 +12,8 @@ import { observer } from "mobx-react-lite"
 import { color, spacing, typography } from "../../theme"
 import { Text } from "../text/text"
 import { EasyIcon } from "../easy-icon/easy-icon"
+import { useState } from "react"
+import { debounce } from "ts-debounce"
 
 const CONTAINER: ViewStyle = {
   justifyContent: "center",
@@ -37,7 +39,6 @@ const INPUT_WRAPPER: ViewStyle = {
 }
 
 const INPUT: TextStyle = {
-  flex: 1,
   fontSize: 16,
   color: color.palette.almostWhite,
 }
@@ -61,16 +62,31 @@ export interface CardFooterProps {
 export const CardFooter = observer(function CardFooter(props: CardFooterProps) {
   const { style } = props
   const styles = Object.assign({}, CONTAINER, style)
+  const [originalInputSize, setOriginalInputSize] = useState(0)
+  const [inputHeight, setInputHeight] = useState(30)
 
   const handleInputSizeChange = (e: NativeSyntheticEvent<TextInputContentSizeChangeEventData>) => {
-    //
+    const inputHeight = e.nativeEvent.contentSize.height
+
+    if (originalInputSize === 0) {
+      setOriginalInputSize(inputHeight)
+      return
+    }
+
+    if (inputHeight > originalInputSize * 2) {
+      setInputHeight((prevHeight) => prevHeight + 30)
+    }
   }
 
   return (
     <View style={styles}>
       <View style={CHOICES_CONTAINER}>
         <View style={INPUT_WRAPPER}>
-          <TextInput style={INPUT} multiline onContentSizeChange={handleInputSizeChange} />
+          <TextInput
+            style={[INPUT, { height: inputHeight }]}
+            multiline
+            onContentSizeChange={handleInputSizeChange}
+          />
         </View>
         <EasyIcon size={40} name="ellipse" onPress={() => null} />
       </View>
