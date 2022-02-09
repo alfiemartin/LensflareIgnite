@@ -1,5 +1,5 @@
 import * as React from "react"
-import { StyleProp, TextInput, TextStyle, View, ViewStyle } from "react-native"
+import { Keyboard, StyleProp, TextInput, TextStyle, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { color, spacing } from "../../theme"
 import { EasyIcon } from "../easy-icon/easy-icon"

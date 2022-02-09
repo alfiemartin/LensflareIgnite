@@ -1,13 +1,5 @@
 import React from "react"
-import {
-  Dimensions,
-  ImageBackground,
-  StyleProp,
-  View,
-  ViewStyle,
-  ImageStyle,
-  Text,
-} from "react-native"
+import { ImageBackground, StyleProp, ViewStyle, ImageStyle, Text, Keyboard } from "react-native"
 import { observer } from "mobx-react-lite"
 import Animated, {
   useAnimatedStyle,
@@ -15,7 +7,6 @@ import Animated, {
   WithTimingConfig,
 } from "react-native-reanimated"
 import { useEffect } from "react"
-import { CardFooter } from ".."
 
 export interface IUpdateCardUI {
   cardId: number
@@ -89,7 +80,10 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
   })
 
   return (
-    <Animated.View style={[styles, aSwipeStyles, { zIndex: state == "CURRENT" ? 5 : 10 }]}>
+    <Animated.View
+      onTouchStart={() => Keyboard.dismiss()}
+      style={[styles, aSwipeStyles, { zIndex: state == "CURRENT" ? 5 : 10 }]}
+    >
       <ImageBackground
         source={{ uri: data && data.image }}
         style={MAIN_IMAGE_CONTAINER}
@@ -97,7 +91,6 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
       >
         <Text style={{ marginLeft: "auto", fontSize: 28 }}>{state}</Text>
       </ImageBackground>
-      <CardFooter />
     </Animated.View>
   )
 })

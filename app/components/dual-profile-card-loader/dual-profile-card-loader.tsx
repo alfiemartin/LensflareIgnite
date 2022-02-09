@@ -1,9 +1,9 @@
 import * as React from "react"
-import { Dimensions, Image, StyleProp, View, ViewStyle } from "react-native"
+import { Dimensions, StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { CardFooter, ProfileCard, TState } from ".."
 import { ProfileCardSnapshot, useStores } from "../../models"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { PanGestureHandler } from "react-native-gesture-handler"
 import Animated, {
   interpolate,
@@ -192,10 +192,12 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
       }
     },
     onEnd: (_, ctx) => {
-      if (ctx.transX > 150) {
+      const completeThreshold = 100
+
+      if (ctx.transX > completeThreshold) {
         runOnJS(bringNewCard)("PREV")
         return
-      } else if (ctx.transX < -150) {
+      } else if (ctx.transX < -completeThreshold) {
         runOnJS(bringNewCard)("NEXT")
         return
       }
@@ -220,6 +222,7 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
           })}
         </Animated.View>
       </PanGestureHandler>
+      <CardFooter />
     </View>
   )
 })
