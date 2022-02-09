@@ -51,12 +51,12 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
       state: "PREV",
     },
     {
-      counter: 1,
+      counter: 0,
       translationX: 0,
       state: "CURRENT",
     },
     {
-      counter: 2,
+      counter: 1,
       translationX: screenWidth,
       state: "NEXT",
     },
@@ -66,14 +66,7 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
   const bringNewCard = (state: TState) => {
     setCardData((prevData) => {
       return prevData.map((card) => {
-        if (card.state == "PREV" && state == "PREV") {
-          return {
-            ...card,
-            translationX: withTiming(0),
-          }
-        }
-
-        if (card.state == "NEXT" && state == "NEXT") {
+        if (card.state == state) {
           return {
             ...card,
             translationX: withTiming(0),
@@ -88,13 +81,30 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
       setCardData((prevData) => {
         return prevData.map((card) => {
           if (state == "PREV") {
-            if (card.state == "PREV") {
-              return { ...card, state: "CURRENT" }
-            } else if (card.state == "NEXT") {
-              return { ...card, state: "" }
+            switch (card.state) {
+              case "PREV":
+                return { ...card, state: "CURRENT", translationX: card.translationX }
+              case "NEXT":
+                return { ...card }
+              case "CURRENT":
+                return { ...card, state: "PREV", translationX: -screenWidth }
             }
+          }
 
-            return { ...card, state: "CURRENT" }
+          if (state == "NEXT") {
+            switch (card.state) {
+              case "NEXT":
+                return { ...card, state: "CURRENT", translationX: card.translationX }
+              case "PREV":
+                return { ...card }
+              case "CURRENT":
+                return {
+                  ...card,
+                  state: "NEXT",
+                  translationX: screenWidth,
+                  counter: card.counter + 2,
+                }
+            }
           }
 
           return card

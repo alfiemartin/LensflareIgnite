@@ -1,20 +1,20 @@
 import React from "react"
-import { Dimensions, ImageBackground, StyleProp, View, ViewStyle, ImageStyle } from "react-native"
+import {
+  Dimensions,
+  ImageBackground,
+  StyleProp,
+  View,
+  ViewStyle,
+  ImageStyle,
+  Text,
+} from "react-native"
 import { observer } from "mobx-react-lite"
 import Animated, {
-  Easing,
-  interpolate,
-  runOnJS,
-  useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
-  withDelay,
-  withSequence,
-  withTiming,
   WithTimingConfig,
 } from "react-native-reanimated"
 import { useEffect } from "react"
-import { CardFooter } from "../card-footer/card-footer"
 
 export interface IUpdateCardUI {
   cardId: number
@@ -93,7 +93,9 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
         source={{ uri: data && data.image }}
         style={MAIN_IMAGE_CONTAINER}
         imageStyle={MAIN_IMAGE}
-      ></ImageBackground>
+      >
+        <Text style={{ marginLeft: "auto", fontSize: 28 }}>{state}</Text>
+      </ImageBackground>
     </Animated.View>
   )
 })
