@@ -2,7 +2,7 @@ import * as React from "react"
 import { Dimensions, Image, StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { CardFooter, ProfileCard, TState } from ".."
-import { useStores } from "../../models"
+import { ProfileCardSnapshot, useStores } from "../../models"
 import { useEffect, useState } from "react"
 import { PanGestureHandler } from "react-native-gesture-handler"
 import Animated, {
@@ -28,6 +28,7 @@ export interface ICardState {
   counter: number
   translationX: number
   state: TState
+  data: ProfileCardSnapshot
 }
 
 /**
@@ -49,16 +50,19 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
       counter: 0,
       translationX: -screenWidth,
       state: "PREV",
+      data: profiles[0],
     },
     {
       counter: 0,
       translationX: 0,
       state: "CURRENT",
+      data: profiles[0],
     },
     {
       counter: 1,
       translationX: screenWidth,
       state: "NEXT",
+      data: profiles[1],
     },
   ]
   const [cardData, setCardData] = useState(initialCardState)
@@ -103,6 +107,7 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
                   state: "NEXT",
                   translationX: screenWidth,
                   counter: card.counter + 2,
+                  data: profiles[card.counter + 2],
                 }
             }
           }
@@ -116,14 +121,20 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
   const translatePrevCard = (translationX: number) => {
     setCardData((prevData) => {
       return prevData.map((card) => {
-        if (card.state == "PREV") {
-          return {
-            ...card,
-            translationX: interpolate(translationX, [0, screenWidth], [-screenWidth, 0]),
-          }
+        switch (card.state) {
+          case "PREV":
+            return {
+              ...card,
+              translationX: interpolate(translationX, [0, screenWidth], [-screenWidth, 0]),
+            }
+          case "NEXT":
+            return {
+              ...card,
+              translationX: screenWidth,
+            }
+          default:
+            return card
         }
-
-        return card
       })
     })
   }
@@ -131,14 +142,20 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
   const translateNextCard = (translationX: number) => {
     setCardData((prevData) => {
       return prevData.map((card) => {
-        if (card.state == "NEXT") {
-          return {
-            ...card,
-            translationX: interpolate(translationX, [0, -screenWidth], [screenWidth, 0]),
-          }
+        switch (card.state) {
+          case "NEXT":
+            return {
+              ...card,
+              translationX: interpolate(translationX, [0, -screenWidth], [screenWidth, 0]),
+            }
+          case "PREV":
+            return {
+              ...card,
+              translationX: -screenWidth,
+            }
+          default:
+            return card
         }
-
-        return card
       })
     })
   }
@@ -195,7 +212,7 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
             return (
               <ProfileCard
                 key={i}
-                data={profiles[card.counter]}
+                data={card.data}
                 translationX={card.translationX}
                 state={card.state}
               />
@@ -203,7 +220,6 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
           })}
         </Animated.View>
       </PanGestureHandler>
-      <CardFooter />
     </View>
   )
 })

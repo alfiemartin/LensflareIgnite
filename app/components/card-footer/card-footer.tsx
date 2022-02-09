@@ -1,19 +1,8 @@
 import * as React from "react"
-import {
-  NativeSyntheticEvent,
-  StyleProp,
-  TextInput,
-  TextInputContentSizeChangeEventData,
-  TextStyle,
-  View,
-  ViewStyle,
-} from "react-native"
+import { StyleProp, TextInput, TextStyle, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, spacing, typography } from "../../theme"
-import { Text } from "../text/text"
+import { color, spacing } from "../../theme"
 import { EasyIcon } from "../easy-icon/easy-icon"
-import { useState } from "react"
-import { debounce } from "ts-debounce"
 
 const CONTAINER: ViewStyle = {
   justifyContent: "center",
@@ -29,13 +18,18 @@ const CHOICES_CONTAINER: ViewStyle = {
   borderBottomRightRadius: 20,
 }
 
-const INPUT_WRAPPER: ViewStyle = {
+const INPUT_BACKGROUND: ViewStyle = {
   flex: 1,
   padding: spacing[1],
-  paddingLeft: spacing[5],
+  paddingLeft: spacing[2],
   backgroundColor: color.palette.fullBlack,
   borderRadius: 20,
   marginRight: spacing[3],
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  right: 0,
+  paddingBottom: 15,
 }
 
 const INPUT: TextStyle = {
@@ -43,10 +37,9 @@ const INPUT: TextStyle = {
   color: color.palette.almostWhite,
 }
 
-const TEXT: TextStyle = {
-  fontFamily: typography.primary,
-  fontSize: 14,
-  color: color.primary,
+const INPUT_WRAPPER: ViewStyle = {
+  flex: 1,
+  position: "relative",
 }
 
 export interface CardFooterProps {
@@ -54,41 +47,25 @@ export interface CardFooterProps {
    * An optional style override useful for padding & margin.
    */
   style?: StyleProp<ViewStyle>
+  hidden?: boolean
 }
 
 /**
  * Describe your component here
  */
 export const CardFooter = observer(function CardFooter(props: CardFooterProps) {
-  const { style } = props
+  const { style, hidden = false } = props
   const styles = Object.assign({}, CONTAINER, style)
-  const [originalInputSize, setOriginalInputSize] = useState(0)
-  const [inputHeight, setInputHeight] = useState(30)
-
-  const handleInputSizeChange = (e: NativeSyntheticEvent<TextInputContentSizeChangeEventData>) => {
-    const inputHeight = e.nativeEvent.contentSize.height
-
-    if (originalInputSize === 0) {
-      setOriginalInputSize(inputHeight)
-      return
-    }
-
-    if (inputHeight > originalInputSize * 2) {
-      setInputHeight((prevHeight) => prevHeight + 30)
-    }
-  }
 
   return (
-    <View style={styles}>
+    <View style={[styles, { opacity: hidden ? 0 : 1 }]}>
       <View style={CHOICES_CONTAINER}>
         <View style={INPUT_WRAPPER}>
-          <TextInput
-            style={[INPUT, { height: inputHeight }]}
-            multiline
-            onContentSizeChange={handleInputSizeChange}
-          />
+          <View style={[INPUT_BACKGROUND, ,]}>
+            <TextInput style={[INPUT]} multiline />
+          </View>
         </View>
-        <EasyIcon size={40} name="ellipse" onPress={() => null} />
+        <EasyIcon size={43} name="ellipse" onPress={() => null} />
       </View>
     </View>
   )

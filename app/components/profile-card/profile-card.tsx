@@ -15,6 +15,7 @@ import Animated, {
   WithTimingConfig,
 } from "react-native-reanimated"
 import { useEffect } from "react"
+import { CardFooter } from ".."
 
 export interface IUpdateCardUI {
   cardId: number
@@ -96,6 +97,7 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
       >
         <Text style={{ marginLeft: "auto", fontSize: 28 }}>{state}</Text>
       </ImageBackground>
+      <CardFooter />
     </Animated.View>
   )
 })

@@ -23,8 +23,8 @@ const NEWCHAT_CONTAINER: ViewStyle = {
   borderRadius: 50000,
   justifyContent: "center",
   alignItems: "center",
-  width: 60,
-  height: 60,
+  width: 70,
+  height: 70,
   backgroundColor: color.palette.deepPurple,
 }
 

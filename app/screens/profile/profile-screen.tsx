@@ -49,9 +49,9 @@ export const ProfileScreen = observer(function ProfileScreen() {
     <Screen style={ROOT}>
       <View style={[HEADER, { backgroundColor: "black" }]}>
         <View style={HEADER_LEFT}>
-          <ProfileIcon imageStyles={HEADER_ICON} size={55} image={profiles[0].image} />
+          <ProfileIcon imageStyles={HEADER_ICON} size={65} image={profiles[0].image} />
         </View>
-        <EasyIcon name="settings-sharp" size={40} color={color.palette.almostWhite} />
+        <EasyIcon name="settings-sharp" size={60} color={color.palette.almostWhite} />
       </View>
       <CurvedScreenBox>
         <ScrollView style={SCROLL_VIEW}>
