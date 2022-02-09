@@ -19,6 +19,16 @@ export const ChatScreen = observer(function ChatScreen() {
   useEffect(() => {
     setMessages([
       {
+        _id: 0,
+        text: "Hello developer",
+        createdAt: new Date(),
+        user: {
+          _id: -1,
+          name: "React Native",
+          avatar: mockProfileCardData[1].image,
+        },
+      },
+      {
         _id: 1,
         text: "from another dev",
         createdAt: new Date(),
@@ -26,16 +36,6 @@ export const ChatScreen = observer(function ChatScreen() {
           _id: -1,
           name: "React Native",
           avatar: mockProfileCardData[0].image,
-        },
-      },
-      {
-        _id: 2,
-        text: "Hello developer",
-        createdAt: new Date(),
-        user: {
-          _id: -1,
-          name: "React Native",
-          avatar: mockProfileCardData[1].image,
         },
       },
     ])

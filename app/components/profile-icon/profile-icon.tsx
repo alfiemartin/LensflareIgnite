@@ -1,11 +1,12 @@
 import * as React from "react"
 import { ImageStyle, StyleProp, TextStyle, View, ViewStyle, Image } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, typography } from "../../theme"
+import { color, SHADOW, typography } from "../../theme"
 import { Text } from "../text/text"
 
 const CONTAINER: ViewStyle = {
   justifyContent: "center",
+  borderRadius: 5000,
 }
 
 const TEXT: TextStyle = {

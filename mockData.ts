@@ -1,3 +1,6 @@
+import { User } from "./app/models"
+import { Message } from "./app/models/message/message"
+
 const mockProfileCardData = [
   {
     id: 0,
@@ -61,4 +64,47 @@ const mockProfileCardData = [
   },
 ]
 
-export { mockProfileCardData }
+const mockUser: User[] = [
+  {
+    id: 0,
+    avatar: mockProfileCardData[0].image,
+    name: mockProfileCardData[0].name,
+  },
+  {
+    id: 1,
+    avatar: mockProfileCardData[1].image,
+    name: mockProfileCardData[1].name,
+  },
+  {
+    id: 2,
+    avatar: mockProfileCardData[2].image,
+    name: mockProfileCardData[2].name,
+  },
+  {
+    id: 3,
+    avatar: mockProfileCardData[3].image,
+    name: mockProfileCardData[3].name,
+  },
+  {
+    id: 4,
+    avatar: mockProfileCardData[4].image,
+    name: mockProfileCardData[4].name,
+  },
+  {
+    id: 5,
+    avatar: mockProfileCardData[5].image,
+    name: mockProfileCardData[5].name,
+  },
+]
+
+const mockMessages: Message[] = [
+  {
+    id: 0,
+    createdAt: new Date(),
+    user: mockUser[0],
+    text: "test text",
+    image: null,
+  },
+]
+
+export { mockProfileCardData, mockUser, mockMessages }

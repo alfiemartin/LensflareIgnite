@@ -10,7 +10,7 @@ export const CharacterModel = types.model("Character").props({
   image: types.maybe(types.string),
 })
 
-type CharacterType = Instance<typeof CharacterModel>
+export type CharacterType = Instance<typeof CharacterModel>
 export interface Character extends CharacterType {}
 type CharacterSnapshotType = SnapshotOut<typeof CharacterModel>
 export interface CharacterSnapshot extends CharacterSnapshotType {}

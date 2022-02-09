@@ -1,5 +1,5 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { CharacterModel, CharacterSnapshot } from "../character/character"
+import { CharacterModel, CharacterType } from "../character/character"
 import { CharacterApi } from "../../services/api/character-api"
 import { withEnvironment } from "../extensions/with-environment"
 
@@ -13,7 +13,7 @@ export const CharacterStoreModel = types
   })
   .extend(withEnvironment)
   .actions((self) => ({
-    saveCharacters: (characterSnapshots: CharacterSnapshot[]) => {
+    saveCharacters: (characterSnapshots: CharacterType[]) => {
       self.characters.replace(characterSnapshots)
     },
   }))
