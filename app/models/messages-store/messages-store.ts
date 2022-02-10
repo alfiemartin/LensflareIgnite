@@ -1,4 +1,5 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { MessageSnapshot } from ".."
 import { mockMessages } from "../../../mockData"
 import { withEnvironment } from "../extensions/with-environment"
 import { MessageModel, MessageType } from "../message/message"
@@ -13,7 +14,7 @@ export const MessagesStoreModel = types
   })
   .extend(withEnvironment)
   .actions((self) => ({
-    saveMessages: (MessageSnapshots: MessageType[]) => {
+    saveMessages: (MessageSnapshots: MessageSnapshot[]) => {
       self.messages.replace(MessageSnapshots)
     },
   }))

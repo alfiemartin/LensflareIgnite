@@ -43,6 +43,8 @@ export async function setupRootStore() {
   }
 
   await rootStore.profileCardStore.getProfileCards() //fetch profiles automatically on app load
+  await rootStore.messagesStore.getMessages(0)
+  console.tron.log(rootStore.messagesStore.messages)
 
   // reactotron logging
   if (__DEV__) {

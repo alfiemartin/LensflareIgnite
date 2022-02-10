@@ -100,10 +100,17 @@ const mockUser: User[] = [
 const mockMessages: Message[] = [
   {
     id: 0,
-    createdAt: new Date(),
+    createdAt: 74384837,
     user: mockUser[0],
     text: "test text",
-    image: null,
+    image: undefined,
+  },
+  {
+    id: 1,
+    createdAt: 743837,
+    user: mockUser[1],
+    text: "test textdsadsadsa",
+    image: undefined,
   },
 ]
 

@@ -34,8 +34,14 @@ const TOP_BAR_PROFILES: ViewStyle = {
 
 export const MatchesScreen = observer(function MatchesScreen() {
   // Pull in one of our MST stores
-  const { profileCardStore } = useStores()
-  const profiles = profileCardStore.profiles
+  const { usersStore, profileCardStore } = useStores()
+  const { profiles } = profileCardStore
+
+  useEffect(() => {
+    ;(async () => {
+      await usersStore.getUsers(0)
+    })()
+  }, [])
 
   return (
     <Screen style={ROOT}>
