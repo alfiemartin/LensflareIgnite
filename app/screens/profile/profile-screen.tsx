@@ -13,6 +13,7 @@ import {
 import { color, spacing } from "../../theme"
 import { useStores } from "../../models"
 import { Col, Grid } from "react-native-easy-grid"
+import { Shadow } from "react-native-shadow-2"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.fullBlack,
@@ -57,13 +58,17 @@ export const ProfileScreen = observer(function ProfileScreen() {
         <ScrollView style={SCROLL_VIEW}>
           <Grid>
             <Col style={{ marginRight: 5 }}>
-              <ImageBox image={profiles[0].image} text="Friends" />
+              <View style={{ position: "relative" }}>
+                <ImageBox image={profiles[0].image} text="Friends" />
+              </View>
             </Col>
             <Col style={{ marginLeft: 5 }}>
               <ImageBox image={profiles[1].image} text="Followers" />
             </Col>
           </Grid>
-          <ImageBox image={profiles[2].image} text="My Profile" />
+          <View style={{ flex: 1 }}>
+            <ImageBox image={profiles[2].image} text="My Profile" />
+          </View>
         </ScrollView>
       </CurvedScreenBox>
     </Screen>

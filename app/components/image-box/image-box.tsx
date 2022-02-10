@@ -9,8 +9,6 @@ const CONTAINER: ViewStyle = {
   justifyContent: "center",
   marginBottom: spacing[5],
   height: 200,
-  // ...SHADOW,
-  // shadowColor: "#000",
 }
 
 const TEXT: TextStyle = {
