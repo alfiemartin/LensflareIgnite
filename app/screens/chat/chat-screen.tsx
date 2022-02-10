@@ -6,6 +6,7 @@ import { color } from "../../theme"
 import { GiftedChat, IMessage, User } from "react-native-gifted-chat"
 import { mockProfileCardData } from "../../../mockData"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useStores } from "../../models"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.fullBlack,
@@ -16,36 +17,15 @@ export const ChatScreen = observer(function ChatScreen() {
   const [messages, setMessages] = useState<IMessage[]>([])
   const inset = useSafeAreaInsets()
 
-  useEffect(() => {
-    setMessages([
-      {
-        _id: 0,
-        text: "Hello developer",
-        createdAt: new Date(),
-        user: {
-          _id: -1,
-          name: "React Native",
-          avatar: mockProfileCardData[1].image,
-        },
-      },
-      {
-        _id: 1,
-        text: "from another dev",
-        createdAt: new Date(),
-        user: {
-          _id: -1,
-          name: "React Native",
-          avatar: mockProfileCardData[0].image,
-        },
-      },
-    ])
-  }, [])
+  const { messagesStore } = useStores()
+  const { messages: lMessages } = messagesStore
 
-  const user: User = {
-    _id: 3,
-    avatar: mockProfileCardData[1].image,
-    name: "alfie",
-  }
+  useEffect(() => {
+    ;(async () => {
+      await messagesStore.getMessages()
+      setMessages(lMessages.filter((_, i) => i < lMessages.length))
+    })()
+  }, [])
 
   const onSend = useCallback((messages: IMessage[] = []) => {
     setMessages((previousMessages) => GiftedChat.append(previousMessages, messages))
@@ -53,7 +33,12 @@ export const ChatScreen = observer(function ChatScreen() {
 
   return (
     <Screen style={ROOT} noKeyboardAvoid={true}>
-      <GiftedChat bottomOffset={inset.bottom} messages={messages} user={user} onSend={onSend} />
+      <GiftedChat
+        bottomOffset={inset.bottom}
+        messages={messages}
+        user={lMessages[0].user}
+        onSend={onSend}
+      />
     </Screen>
   )
 })

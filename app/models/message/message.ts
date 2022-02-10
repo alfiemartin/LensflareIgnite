@@ -5,7 +5,7 @@ import { UserModel } from "../user/user"
  * Model description here for TypeScript hints.
  */
 export const MessageModel = types.model("Message").props({
-  id: types.identifierNumber,
+  _id: types.identifierNumber,
   text: types.string,
   createdAt: types.number,
   image: types.maybe(types.string),

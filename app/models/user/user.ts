@@ -4,7 +4,7 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
  * Model description here for TypeScript hints.
  */
 export const UserModel = types.model("User").props({
-  id: types.identifierNumber,
+  _id: types.identifierNumber,
   name: types.string,
   avatar: types.maybe(types.string),
 })

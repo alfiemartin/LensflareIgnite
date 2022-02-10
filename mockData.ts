@@ -66,32 +66,32 @@ const mockProfileCardData = [
 
 const mockUser: User[] = [
   {
-    id: 0,
+    _id: 0,
     avatar: mockProfileCardData[0].image,
     name: mockProfileCardData[0].name,
   },
   {
-    id: 1,
+    _id: 1,
     avatar: mockProfileCardData[1].image,
     name: mockProfileCardData[1].name,
   },
   {
-    id: 2,
+    _id: 2,
     avatar: mockProfileCardData[2].image,
     name: mockProfileCardData[2].name,
   },
   {
-    id: 3,
+    _id: 3,
     avatar: mockProfileCardData[3].image,
     name: mockProfileCardData[3].name,
   },
   {
-    id: 4,
+    _id: 4,
     avatar: mockProfileCardData[4].image,
     name: mockProfileCardData[4].name,
   },
   {
-    id: 5,
+    _id: 5,
     avatar: mockProfileCardData[5].image,
     name: mockProfileCardData[5].name,
   },
@@ -99,18 +99,25 @@ const mockUser: User[] = [
 
 const mockMessages: Message[] = [
   {
-    id: 0,
-    createdAt: 74384837,
+    _id: 0,
+    createdAt: new Date().getTime() / 1000,
     user: mockUser[0],
-    text: "test text",
+    text: "Hi this is alfie",
     image: undefined,
   },
   {
-    id: 1,
-    createdAt: 743837,
+    _id: 1,
+    createdAt: new Date().getTime() / 1000,
     user: mockUser[1],
-    text: "test textdsadsadsa",
+    text: "thi is simon",
     image: undefined,
+  },
+  {
+    _id: 2,
+    createdAt: new Date().getTime() / 1000,
+    user: mockUser[1],
+    text: "nice to meet u",
+    image: mockProfileCardData[0].image,
   },
 ]
 

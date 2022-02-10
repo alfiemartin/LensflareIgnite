@@ -2,7 +2,7 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { MessageSnapshot } from ".."
 import { mockMessages } from "../../../mockData"
 import { withEnvironment } from "../extensions/with-environment"
-import { MessageModel, MessageType } from "../message/message"
+import { MessageModel } from "../message/message"
 
 /**
  * Model description here for TypeScript hints.
@@ -19,7 +19,7 @@ export const MessagesStoreModel = types
     },
   }))
   .actions((self) => ({
-    getMessages: async (userId: number) => {
+    getMessages: async (userId?: number) => {
       const messages = mockMessages
       self.saveMessages(messages)
     },

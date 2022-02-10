@@ -36,6 +36,7 @@ export const MatchesScreen = observer(function MatchesScreen() {
   // Pull in one of our MST stores
   const { usersStore, profileCardStore } = useStores()
   const { profiles } = profileCardStore
+  const { users } = usersStore
 
   useEffect(() => {
     ;(async () => {
@@ -50,14 +51,14 @@ export const MatchesScreen = observer(function MatchesScreen() {
           <EasyIcon name="add" size={50} color={color.palette.white} />
         </View>
         <View style={TOP_BAR_PROFILES}>
-          {profiles
-            .filter((x) => x.id < 3)
-            .map((profile) => {
+          {users
+            .filter((x) => x._id < 3)
+            .map((user) => {
               return (
                 <ProfileIcon
                   style={{ marginLeft: spacing[3] }}
-                  key={profile.id}
-                  image={profile.image}
+                  key={user._id}
+                  image={user.avatar}
                   size={65}
                 />
               )
@@ -66,8 +67,8 @@ export const MatchesScreen = observer(function MatchesScreen() {
       </View>
       <CurvedScreenBox>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {profiles.map(({ image, id, name }, i) => {
-            return <ChatPreview key={id} name={name} image={image} />
+          {users.map(({ avatar, _id, name }, i) => {
+            return <ChatPreview key={_id} name={name} image={avatar} />
           })}
         </ScrollView>
       </CurvedScreenBox>
