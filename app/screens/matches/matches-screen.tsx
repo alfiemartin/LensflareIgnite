@@ -35,7 +35,6 @@ const TOP_BAR_PROFILES: ViewStyle = {
 export const MatchesScreen = observer(function MatchesScreen() {
   // Pull in one of our MST stores
   const { usersStore, profileCardStore } = useStores()
-  const { profiles } = profileCardStore
   const { users } = usersStore
 
   useEffect(() => {
