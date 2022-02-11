@@ -7,6 +7,7 @@ import Animated, {
   WithTimingConfig,
 } from "react-native-reanimated"
 import { useEffect } from "react"
+import { ICardState } from ".."
 
 export interface IUpdateCardUI {
   cardId: number
@@ -20,12 +21,8 @@ export interface ProfileCardProps {
    * An optional style override useful for padding & margin.
    */
   style?: StyleProp<ViewStyle>
-  data?: {
-    name: string
-    image: string
-  }
+  data: ICardState
   cardId?: number
-  translationX: number
   state: TState
 }
 
@@ -60,14 +57,14 @@ const instantTiming: WithTimingConfig = {
 }
 
 export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps) {
-  const { style, data, translationX: transXVal, state } = props
+  const { style, data, state } = props
   const styles = Object.assign({}, CONTAINER, style)
 
-  const translationX = useSharedValue(transXVal)
+  const translationX = useSharedValue(data.translationX)
 
   useEffect(() => {
-    translationX.value = transXVal
-  }, [transXVal])
+    translationX.value = data.translationX
+  }, [data.translationX])
 
   const aSwipeStyles = useAnimatedStyle(() => {
     return {
@@ -85,7 +82,7 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
       style={[styles, aSwipeStyles, { zIndex: state == "CURRENT" ? 5 : 10 }]}
     >
       <ImageBackground
-        source={{ uri: data && data.image }}
+        source={{ uri: data && data.data.image }}
         style={MAIN_IMAGE_CONTAINER}
         imageStyle={MAIN_IMAGE}
       >

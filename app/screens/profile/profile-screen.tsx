@@ -66,9 +66,7 @@ export const ProfileScreen = observer(function ProfileScreen() {
               <ImageBox image={profiles[1].image} text="Followers" />
             </Col>
           </Grid>
-          <View style={{ flex: 1 }}>
-            <ImageBox image={profiles[2].image} text="My Profile" />
-          </View>
+          <ImageBox image={profiles[2].image} text="My Profile" />
         </ScrollView>
       </CurvedScreenBox>
     </Screen>

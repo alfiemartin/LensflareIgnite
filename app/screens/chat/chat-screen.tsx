@@ -4,7 +4,6 @@ import { ViewStyle } from "react-native"
 import { Button, Screen, Text } from "../../components"
 import { color } from "../../theme"
 import { GiftedChat, IMessage, User } from "react-native-gifted-chat"
-import { mockProfileCardData } from "../../../mockData"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useStores } from "../../models"
 
@@ -36,7 +35,7 @@ export const ChatScreen = observer(function ChatScreen() {
       <GiftedChat
         bottomOffset={inset.bottom}
         messages={messages}
-        user={lMessages[0].user}
+        user={messages[0]?.user}
         onSend={onSend}
       />
     </Screen>

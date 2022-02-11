@@ -211,14 +211,7 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
       <PanGestureHandler onGestureEvent={gestureHandler}>
         <Animated.View style={{ flex: 1 }}>
           {cardData.map((card, i) => {
-            return (
-              <ProfileCard
-                key={i}
-                data={card.data}
-                translationX={card.translationX}
-                state={card.state}
-              />
-            )
+            return <ProfileCard key={i} data={card} state={card.state} />
           })}
         </Animated.View>
       </PanGestureHandler>

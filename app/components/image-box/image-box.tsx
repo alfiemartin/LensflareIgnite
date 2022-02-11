@@ -1,13 +1,18 @@
 import * as React from "react"
 import { ImageBackground, StyleProp, TextStyle, View, ViewStyle, Text } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, SHADOW, spacing, typography } from "../../theme"
+import { color, spacing, typography } from "../../theme"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { GradientBackground } from ".."
+import { Shadow } from "react-native-shadow-2"
+
+const SHADOW: ViewStyle = {
+  marginBottom: spacing[5],
+  alignSelf: "stretch",
+}
 
 const CONTAINER: ViewStyle = {
   justifyContent: "center",
-  marginBottom: spacing[5],
   height: 200,
 }
 
@@ -42,22 +47,24 @@ export const ImageBox = observer(function ImageBox(props: ImageBoxProps) {
   const styles = Object.assign({}, CONTAINER, style)
 
   return (
-    <View style={[styles]}>
-      <TouchableOpacity style={{ flex: 1 }} containerStyle={{ flex: 1 }}>
-        <ImageBackground
-          style={IMAGE_BACKGROUND}
-          imageStyle={{ borderRadius: BORDER_RADIUS }}
-          source={{ uri: image }}
-        >
-          <GradientBackground
-            style={{ borderRadius: BORDER_RADIUS }}
-            colors={["transparent", color.palette.transBlack]}
-            start={[0, 0.6]}
-            end={[0, 1]}
-          />
-          {text && <Text style={TEXT}>{text}</Text>}
-        </ImageBackground>
-      </TouchableOpacity>
-    </View>
+    <Shadow viewStyle={SHADOW} radius={{ default: BORDER_RADIUS * 1.5 }} distance={5}>
+      <View style={[styles]}>
+        <TouchableOpacity style={{ flex: 1 }} containerStyle={{ flex: 1 }}>
+          <ImageBackground
+            style={IMAGE_BACKGROUND}
+            imageStyle={{ borderRadius: BORDER_RADIUS }}
+            source={{ uri: image }}
+          >
+            <GradientBackground
+              style={{ borderRadius: BORDER_RADIUS }}
+              colors={["transparent", color.palette.transBlack]}
+              start={[0, 0.6]}
+              end={[0, 1]}
+            />
+            {text && <Text style={TEXT}>{text}</Text>}
+          </ImageBackground>
+        </TouchableOpacity>
+      </View>
+    </Shadow>
   )
 })
