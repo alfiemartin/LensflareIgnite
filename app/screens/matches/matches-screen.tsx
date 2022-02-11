@@ -67,7 +67,14 @@ export const MatchesScreen = observer(function MatchesScreen() {
       <CurvedScreenBox>
         <ScrollView showsVerticalScrollIndicator={false}>
           {users.map(({ avatar, _id, name }, i) => {
-            return <ChatPreview key={_id} name={name} image={avatar} />
+            return (
+              <ChatPreview
+                key={_id}
+                name={name}
+                image={avatar}
+                borderStyle={i == users.length - 1 ? { borderBottomWidth: 0 } : null}
+              />
+            )
           })}
         </ScrollView>
       </CurvedScreenBox>

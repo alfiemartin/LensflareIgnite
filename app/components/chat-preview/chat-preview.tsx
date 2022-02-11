@@ -31,6 +31,8 @@ const TEXT_CONTAINER: ViewStyle = {
   flex: 1,
   marginLeft: spacing[2],
   paddingVertical: spacing[1],
+  borderBottomWidth: 1,
+  borderColor: color.palette.lighterGrey,
 }
 
 const NEW_MSG_INDICATOR: ViewStyle = {
@@ -46,13 +48,14 @@ export interface ChatPreviewProps {
   style?: StyleProp<ViewStyle>
   name: string
   image: string
+  borderStyle?: StyleProp<ViewStyle>
 }
 
 /**
  * Describe your component here
  */
 export const ChatPreview = observer(function ChatPreview(props: ChatPreviewProps) {
-  const { style, image, name } = props
+  const { style, image, name, borderStyle } = props
   const styles = Object.assign({}, CONTAINER, style)
 
   const navigation = useNavigation()
@@ -61,7 +64,7 @@ export const ChatPreview = observer(function ChatPreview(props: ChatPreviewProps
     <TouchableOpacity onPress={() => navigation.navigate("chat" as any)}>
       <View style={styles}>
         <ProfileIcon image={image} />
-        <View style={TEXT_CONTAINER}>
+        <View style={[TEXT_CONTAINER, borderStyle]}>
           <Text style={NAME}>{name}</Text>
           <Text style={PREVIEW_TEXT}>Hey wys g</Text>
         </View>

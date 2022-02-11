@@ -1,10 +1,19 @@
 import * as React from "react"
-import { ImageBackground, StyleProp, TextStyle, View, ViewStyle, Text } from "react-native"
+import {
+  ImageBackground,
+  StyleProp,
+  TextStyle,
+  View,
+  ViewStyle,
+  Text,
+  TouchableOpacityProps,
+} from "react-native"
 import { observer } from "mobx-react-lite"
 import { color, spacing, typography } from "../../theme"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { GradientBackground } from ".."
 import { Shadow } from "react-native-shadow-2"
+import { GenericTouchableProps } from "react-native-gesture-handler/lib/typescript/components/touchables/GenericTouchable"
 
 const SHADOW: ViewStyle = {
   marginBottom: spacing[5],
@@ -35,6 +44,9 @@ export interface ImageBoxProps {
   style?: StyleProp<ViewStyle>
   image: string
   text?: string
+  touchableProps?:
+    | (TouchableOpacityProps & GenericTouchableProps)
+    | Readonly<TouchableOpacityProps & GenericTouchableProps>
 }
 
 const BORDER_RADIUS = 10
@@ -43,13 +55,13 @@ const BORDER_RADIUS = 10
  * A fixed height box with a background image
  */
 export const ImageBox = observer(function ImageBox(props: ImageBoxProps) {
-  const { style, image, text } = props
+  const { style, image, text, touchableProps } = props
   const styles = Object.assign({}, CONTAINER, style)
 
   return (
     <Shadow viewStyle={SHADOW} radius={{ default: BORDER_RADIUS * 1.5 }} distance={5}>
       <View style={[styles]}>
-        <TouchableOpacity style={{ flex: 1 }} containerStyle={{ flex: 1 }}>
+        <TouchableOpacity style={{ flex: 1 }} containerStyle={{ flex: 1 }} {...touchableProps}>
           <ImageBackground
             style={IMAGE_BACKGROUND}
             imageStyle={{ borderRadius: BORDER_RADIUS }}

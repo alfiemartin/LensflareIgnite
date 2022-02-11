@@ -14,6 +14,7 @@ import { color, spacing } from "../../theme"
 import { useStores } from "../../models"
 import { Col, Grid } from "react-native-easy-grid"
 import { Shadow } from "react-native-shadow-2"
+import { useNavigation } from "@react-navigation/native"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.fullBlack,
@@ -46,6 +47,16 @@ export const ProfileScreen = observer(function ProfileScreen() {
   const { profileCardStore } = useStores()
   const { profiles } = profileCardStore
 
+  const navigation = useNavigation()
+
+  const showProfile = () => {
+    navigation.navigate("profileEditor" as any)
+  }
+
+  const showUserList = () => {
+    navigation.navigate("userList" as any)
+  }
+
   return (
     <Screen style={ROOT}>
       <View style={[HEADER, { backgroundColor: "black" }]}>
@@ -59,14 +70,26 @@ export const ProfileScreen = observer(function ProfileScreen() {
           <Grid>
             <Col style={{ marginRight: 5 }}>
               <View style={{ position: "relative" }}>
-                <ImageBox image={profiles[0].image} text="Friends" />
+                <ImageBox
+                  touchableProps={{ onPress: showUserList }}
+                  image={profiles[0].image}
+                  text="Friends"
+                />
               </View>
             </Col>
             <Col style={{ marginLeft: 5 }}>
-              <ImageBox image={profiles[1].image} text="Followers" />
+              <ImageBox
+                touchableProps={{ onPress: showUserList }}
+                image={profiles[1].image}
+                text="Followers"
+              />
             </Col>
           </Grid>
-          <ImageBox image={profiles[2].image} text="My Profile" />
+          <ImageBox
+            touchableProps={{ onPress: showProfile }}
+            image={profiles[2].image}
+            text="My Profile"
+          />
         </ScrollView>
       </CurvedScreenBox>
     </Screen>

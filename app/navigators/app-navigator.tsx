@@ -7,7 +7,15 @@
 import React from "react"
 import { useColorScheme, ViewStyle } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
-import { CameraScreen, ChatScreen, ExplorerScreen, MatchesScreen, ProfileScreen } from "../screens"
+import {
+  CameraScreen,
+  ChatScreen,
+  ExplorerScreen,
+  MatchesScreen,
+  ProfileEditorScreen,
+  ProfileScreen,
+  UserListScreen,
+} from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
   createMaterialTopTabNavigator,
@@ -33,6 +41,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 export type StackNavigatorParamList = {
   tabBar: undefined
   chat: undefined
+  profileEditor: undefined
+  userList: undefined
 }
 
 export type TabNavigatorParamList = {
@@ -61,6 +71,8 @@ const AppStack = () => {
     >
       <Stack.Screen name="tabBar" component={AppTabBar} />
       <Stack.Screen name="chat" options={{ headerShown: true }} component={ChatScreen} />
+      <Stack.Screen name="profileEditor" component={ProfileEditorScreen} />
+      <Stack.Screen name="userList" component={UserListScreen} />
     </Stack.Navigator>
   )
 }
