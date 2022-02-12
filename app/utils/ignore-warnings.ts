@@ -7,5 +7,6 @@ import { LogBox } from "react-native"
 // prettier-ignore
 LogBox.ignoreLogs([
   "Require cycle:",
-  "Animated.event now re"
+  "Animated.event now re",
+  "useNative"
 ])

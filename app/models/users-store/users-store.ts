@@ -18,7 +18,7 @@ export const UsersStoreModel = types
     },
   }))
   .actions((self) => ({
-    getUsers: async (userId: number) => {
+    getUsers: async (userId?: number) => {
       const users = mockUser
       self.saveUsers(users)
     },

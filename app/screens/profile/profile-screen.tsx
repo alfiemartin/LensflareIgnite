@@ -1,6 +1,6 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { ImageStyle, ScrollView, TextStyle, View, ViewStyle } from "react-native"
+import { ImageStyle, ScrollView, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
 import {
   CurvedScreenBox,
   EasyIcon,
@@ -57,13 +57,22 @@ export const ProfileScreen = observer(function ProfileScreen() {
     navigation.navigate("userList" as any)
   }
 
+  const showSettings = () => {
+    navigation.navigate("settings" as any)
+  }
+
   return (
     <Screen style={ROOT}>
       <View style={[HEADER, { backgroundColor: "black" }]}>
         <View style={HEADER_LEFT}>
           <ProfileIcon imageStyles={HEADER_ICON} size={65} image={profiles[0].image} />
         </View>
-        <EasyIcon name="settings-sharp" size={60} color={color.palette.almostWhite} />
+        <EasyIcon
+          name="settings-sharp"
+          size={60}
+          color={color.palette.almostWhite}
+          onPress={showSettings}
+        />
       </View>
       <CurvedScreenBox>
         <ScrollView style={SCROLL_VIEW}>

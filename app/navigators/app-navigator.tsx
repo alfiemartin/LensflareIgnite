@@ -14,6 +14,7 @@ import {
   MatchesScreen,
   ProfileEditorScreen,
   ProfileScreen,
+  SettingsScreen,
   UserListScreen,
 } from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
@@ -43,6 +44,7 @@ export type StackNavigatorParamList = {
   chat: undefined
   profileEditor: undefined
   userList: undefined
+  settings: undefined
 }
 
 export type TabNavigatorParamList = {
@@ -73,6 +75,7 @@ const AppStack = () => {
       <Stack.Screen name="chat" options={{ headerShown: true }} component={ChatScreen} />
       <Stack.Screen name="profileEditor" component={ProfileEditorScreen} />
       <Stack.Screen name="userList" component={UserListScreen} />
+      <Stack.Screen name="settings" component={SettingsScreen} />
     </Stack.Navigator>
   )
 }

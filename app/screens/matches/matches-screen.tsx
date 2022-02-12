@@ -72,7 +72,7 @@ export const MatchesScreen = observer(function MatchesScreen() {
                 key={_id}
                 name={name}
                 image={avatar}
-                borderStyle={i == users.length - 1 ? { borderBottomWidth: 0 } : null}
+                borderStyle={{ borderBottomWidth: 0 }}
               />
             )
           })}
