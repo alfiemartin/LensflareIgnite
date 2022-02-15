@@ -11,9 +11,11 @@ import {
   CameraScreen,
   ChatScreen,
   ExplorerScreen,
+  LoginScreen,
   MatchesScreen,
   ProfileEditorScreen,
   ProfileScreen,
+  RegisterScreen,
   SettingsScreen,
   UserListScreen,
 } from "../screens"
@@ -55,8 +57,14 @@ export type TabNavigatorParamList = {
   camera: undefined
 }
 
+export type OnboardingParamList = {
+  login: undefined
+  register: undefined
+}
+
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createNativeStackNavigator<StackNavigatorParamList>()
+const OnboardingStack_ = createNativeStackNavigator<OnboardingParamList>()
 const Tab = createMaterialTopTabNavigator<TabNavigatorParamList>()
 
 const AppStack = () => {
@@ -77,6 +85,24 @@ const AppStack = () => {
       <Stack.Screen name="userList" component={UserListScreen} />
       <Stack.Screen name="settings" component={SettingsScreen} />
     </Stack.Navigator>
+  )
+}
+
+const OnboardingStack = () => {
+  return (
+    <OnboardingStack_.Navigator
+      screenOptions={{
+        headerShown: false,
+        animation: "slide_from_right",
+        gestureEnabled: true,
+        headerStyle: { backgroundColor: color.background },
+        headerTintColor: color.primary,
+      }}
+      initialRouteName="login"
+    >
+      <OnboardingStack_.Screen name="login" component={LoginScreen} />
+      <OnboardingStack_.Screen name="register" component={RegisterScreen} />
+    </OnboardingStack_.Navigator>
   )
 }
 
@@ -139,6 +165,7 @@ export const AppNavigator = (props: NavigationProps) => {
       {...props}
     >
       <AppStack />
+      {/* <OnboardingStack /> */}
     </NavigationContainer>
   )
 }

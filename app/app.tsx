@@ -32,6 +32,8 @@ function App() {
       await initFonts() // expo
       await setupRootStore().then(setRootStore)
     })()
+
+    return () => setRootStore(undefined)
   }, [])
 
   // Before we show the app, we have to wait for our state to be ready.

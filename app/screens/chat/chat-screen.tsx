@@ -24,6 +24,10 @@ export const ChatScreen = observer(function ChatScreen() {
       await messagesStore.getMessages()
       setMessages(lMessages.filter((_, i) => i < lMessages.length))
     })()
+
+    return () => {
+      setMessages([])
+    }
   }, [])
 
   const onSend = useCallback((messages: IMessage[] = []) => {
