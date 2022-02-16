@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { StyleProp, TextInput, TextStyle, View, ViewStyle, Button } from "react-native"
 import { Screen, Text } from "../../components"
-import { request, gql } from "graphql-request"
 import { color, spacing } from "../../theme"
 import * as AppleAuthentication from "expo-apple-authentication"
+import { useQuery } from "../../utils/general"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.almostWhite,
@@ -34,24 +34,13 @@ const BUTTON: TextStyle = {
 }
 
 export const LoginScreen = observer(function LoginScreen() {
-  // const query = gql`
-  //   {
-  //     query
-  //     Names {
-  //       names {
-  //         _id
-  //         firstname
-  //         secondname
-  //       }
-  //     }
-  //   }
-  // `
-
-  // useEffect(() => {
-  //   request("http://localhost:4000/graphql", query)
-  //     .then((data) => console.log(data))
-  //     .catch((err) => console.error(err))
-  // }, [])
+  useEffect(() => {
+    fetch("http://192.168.0.107:4000/test", {
+      method: "GET",
+    })
+      .then((res) => res.text())
+      .then((data) => console.log(data))
+  }, [])
 
   return (
     <Screen style={ROOT} preset="scroll">

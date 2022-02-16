@@ -164,8 +164,8 @@ export const AppNavigator = (props: NavigationProps) => {
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
       {...props}
     >
-      <AppStack />
-      {/* <OnboardingStack /> */}
+      {/* <AppStack /> */}
+      <OnboardingStack />
     </NavigationContainer>
   )
 }
