@@ -38,16 +38,17 @@ const BUTTON: TextStyle = {
 export const LoginScreen = observer(function LoginScreen() {
   const inset = useSafeAreaInsets()
 
-  useEffect(() => {
+  const debug = () => {
     fetch("http://192.168.0.107:4000/test", {
       method: "GET",
     })
       .then((res) => res.text())
       .then((data) => console.log(data))
-  }, [])
+  }
 
   return (
     <Screen style={[ROOT, { paddingBottom: inset.bottom }]} preset="fixed">
+      <Button title="debug" onPress={debug} />
       <AppleAuthentication.AppleAuthenticationButton
         buttonType={AppleAuthentication.AppleAuthenticationButtonType.CONTINUE}
         buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
