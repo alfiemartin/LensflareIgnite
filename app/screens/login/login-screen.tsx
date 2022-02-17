@@ -5,11 +5,13 @@ import { Screen, Text } from "../../components"
 import { color, spacing } from "../../theme"
 import * as AppleAuthentication from "expo-apple-authentication"
 import { useQuery } from "../../utils/general"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.almostWhite,
+  padding: spacing[1],
   flex: 1,
-  justifyContent: "center",
+  justifyContent: "flex-end",
   alignItems: "center",
 }
 
@@ -34,6 +36,8 @@ const BUTTON: TextStyle = {
 }
 
 export const LoginScreen = observer(function LoginScreen() {
+  const inset = useSafeAreaInsets()
+
   useEffect(() => {
     fetch("http://192.168.0.107:4000/test", {
       method: "GET",
@@ -43,7 +47,7 @@ export const LoginScreen = observer(function LoginScreen() {
   }, [])
 
   return (
-    <Screen style={ROOT} preset="scroll">
+    <Screen style={[ROOT, { paddingBottom: inset.bottom }]} preset="fixed">
       <AppleAuthentication.AppleAuthenticationButton
         buttonType={AppleAuthentication.AppleAuthenticationButtonType.CONTINUE}
         buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
@@ -60,7 +64,13 @@ export const LoginScreen = observer(function LoginScreen() {
               ],
             })
 
-            console.log(credential)
+            fetch("http://192.168.0.107:4000/appleSignUp", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(credential),
+            })
+              .then((res) => res.json())
+              .then((data) => console.log(data))
           } catch (error) {
             console.log(error)
           }
