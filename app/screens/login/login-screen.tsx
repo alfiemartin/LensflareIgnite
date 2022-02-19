@@ -6,6 +6,8 @@ import { color, spacing } from "../../theme"
 import * as AppleAuthentication from "expo-apple-authentication"
 import { useQuery } from "../../utils/general"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import * as SecureStore from "expo-secure-store"
+import { useStores } from "../../models"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.almostWhite,
@@ -43,30 +45,40 @@ const debug = () => {
     .then((data) => console.log(data))
 }
 
-const loginWithApple = (credential: AppleAuthentication.AppleAuthenticationCredential) => {
-  fetch("http://192.168.0.107:4000/appleSignIn", {
+const loginWithApple = async (credential: AppleAuthentication.AppleAuthenticationCredential) => {
+  const res = await fetch("http://192.168.0.107:4000/appleSignIn", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(credential),
   })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data)
-    })
+  const data = await res.json()
+
+  console.log(data)
+
+  if (data.success && data.sessionId) {
+    try {
+      await SecureStore.setItemAsync("sessionId", data.sessionId)
+      console.log("saved session id")
+    } catch (e) {
+      console.error("could not save session Id")
+    }
+  }
 }
 
 export const LoginScreen = observer(function LoginScreen() {
   const inset = useSafeAreaInsets()
+  const { usersStore } = useStores()
 
   return (
     <Screen style={[ROOT, { paddingBottom: inset.bottom }]} preset="fixed">
+      <Text>{usersStore.currentUser.sessionId ?? "no session found"}</Text>
       <Button title="debug" onPress={debug} />
       <AppleAuthentication.AppleAuthenticationButton
         buttonType={AppleAuthentication.AppleAuthenticationButtonType.CONTINUE}
         buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
         style={{
           width: "100%",
-          height: 50,
+          height: 60,
         }}
         onPress={async () => {
           try {

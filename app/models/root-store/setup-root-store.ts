@@ -42,7 +42,7 @@ export async function setupRootStore() {
     __DEV__ && console.tron.error(e.message, null)
   }
 
-  await rootStore.profileCardStore.getProfileCards() //fetch profiles automatically on app load
+  await rootStore.usersStore.getSavedUser()
 
   // reactotron logging
   if (__DEV__) {
