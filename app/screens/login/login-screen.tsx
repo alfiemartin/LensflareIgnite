@@ -35,16 +35,28 @@ const BUTTON: TextStyle = {
   borderWidth: 0,
 }
 
+const debug = () => {
+  fetch("http://192.168.0.107:4000/test", {
+    method: "GET",
+  })
+    .then((res) => res.text())
+    .then((data) => console.log(data))
+}
+
+const loginWithApple = (credential: AppleAuthentication.AppleAuthenticationCredential) => {
+  fetch("http://192.168.0.107:4000/appleSignIn", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(credential),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data)
+    })
+}
+
 export const LoginScreen = observer(function LoginScreen() {
   const inset = useSafeAreaInsets()
-
-  const debug = () => {
-    fetch("http://192.168.0.107:4000/test", {
-      method: "GET",
-    })
-      .then((res) => res.text())
-      .then((data) => console.log(data))
-  }
 
   return (
     <Screen style={[ROOT, { paddingBottom: inset.bottom }]} preset="fixed">
@@ -65,13 +77,11 @@ export const LoginScreen = observer(function LoginScreen() {
               ],
             })
 
-            fetch("http://192.168.0.107:4000/appleSignUp", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(credential),
-            })
-              .then((res) => res.json())
-              .then((data) => console.log(data))
+            if (!credential.fullName.givenName) {
+              loginWithApple(credential)
+            } else {
+              // signUp();
+            }
           } catch (error) {
             console.log(error)
           }
