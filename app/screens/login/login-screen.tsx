@@ -45,23 +45,30 @@ const debug = () => {
     .then((data) => console.log(data))
 }
 
-const loginWithApple = async (credential: AppleAuthentication.AppleAuthenticationCredential) => {
+const loginWithApple = async (
+  credential: AppleAuthentication.AppleAuthenticationCredential,
+  saveSession: (sessionId: string) => Promise<void>,
+) => {
+  const savedSessionId = await SecureStore.getItemAsync("sessionId")
+  console.log(savedSessionId)
+
   const res = await fetch("http://192.168.0.107:4000/appleSignIn", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(credential),
+    body: JSON.stringify({ ...credential, sessionId: savedSessionId }),
   })
   const data = await res.json()
 
   console.log(data)
 
   if (data.success && data.sessionId) {
-    try {
-      await SecureStore.setItemAsync("sessionId", data.sessionId)
-      console.log("saved session id")
-    } catch (e) {
-      console.error("could not save session Id")
-    }
+    // try {
+    //   await SecureStore.setItemAsync("sessionId", data.sessionId)
+    //   await saveSession(data.sessionId)
+    //   console.log("saved session id")
+    // } catch (e) {
+    //   console.error("could not save session Id")
+    // }
   }
 }
 
@@ -90,7 +97,7 @@ export const LoginScreen = observer(function LoginScreen() {
             })
 
             if (!credential.fullName.givenName) {
-              loginWithApple(credential)
+              loginWithApple(credential, usersStore.saveCurrentUser)
             } else {
               // signUp();
             }
