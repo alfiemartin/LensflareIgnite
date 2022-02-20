@@ -5,6 +5,7 @@ module.exports = {
   },
   plugins: [
     'react-native-reanimated/plugin',
+    "inline-dotenv",
     [
       "@babel/plugin-proposal-decorators",
       {

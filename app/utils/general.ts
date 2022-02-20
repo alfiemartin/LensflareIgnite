@@ -1,4 +1,4 @@
-export const useQuery = (url: string, query: string) => {
+export const useQuery = (url: string, query: string, variables?: {}) => {
   return fetch(url, {
     method: "POST",
     headers: {
@@ -6,6 +6,7 @@ export const useQuery = (url: string, query: string) => {
     },
     body: JSON.stringify({
       query,
+      variables,
     }),
   })
 }

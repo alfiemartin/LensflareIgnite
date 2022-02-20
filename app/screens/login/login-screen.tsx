@@ -8,6 +8,7 @@ import { useQuery } from "../../utils/general"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import * as SecureStore from "expo-secure-store"
 import { useStores } from "../../models"
+import { testAppleLoginQuery } from "../../utils/queries"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.almostWhite,
@@ -37,39 +38,20 @@ const BUTTON: TextStyle = {
   borderWidth: 0,
 }
 
-const debug = () => {
-  fetch("http://192.168.0.107:4000/test", {
-    method: "GET",
-  })
-    .then((res) => res.text())
-    .then((data) => console.log(data))
+const debug = async () => {
+  const result = await useQuery(process.env["GQL_URL"], testAppleLoginQuery)
+
+  const data = await result.json()
+  console.log(data)
 }
 
 const loginWithApple = async (
   credential: AppleAuthentication.AppleAuthenticationCredential,
+  sessionId: string,
   saveSession: (sessionId: string) => Promise<void>,
 ) => {
-  const savedSessionId = await SecureStore.getItemAsync("sessionId")
-  console.log(savedSessionId)
-
-  const res = await fetch("http://192.168.0.107:4000/appleSignIn", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...credential, sessionId: savedSessionId }),
-  })
-  const data = await res.json()
-
-  console.log(data)
-
-  if (data.success && data.sessionId) {
-    // try {
-    //   await SecureStore.setItemAsync("sessionId", data.sessionId)
-    //   await saveSession(data.sessionId)
-    //   console.log("saved session id")
-    // } catch (e) {
-    //   console.error("could not save session Id")
-    // }
-  }
+  //this is only reached if user is already signed up
+  // const result = useQuery("")
 }
 
 export const LoginScreen = observer(function LoginScreen() {
@@ -97,7 +79,11 @@ export const LoginScreen = observer(function LoginScreen() {
             })
 
             if (!credential.fullName.givenName) {
-              loginWithApple(credential, usersStore.saveCurrentUser)
+              loginWithApple(
+                credential,
+                usersStore.currentUser.sessionId,
+                usersStore.saveCurrentUser,
+              )
             } else {
               // signUp();
             }
