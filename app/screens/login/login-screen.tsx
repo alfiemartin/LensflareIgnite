@@ -8,7 +8,7 @@ import { useQuery } from "../../utils/general"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import * as SecureStore from "expo-secure-store"
 import { useStores } from "../../models"
-import { appleLoginMutation, testAppleLoginQuery } from "../../utils/queries"
+import { appleLoginQuery, appleSignupMutation, testAppleLoginQuery } from "../../utils/queries"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.almostWhite,
@@ -50,7 +50,7 @@ const loginWithApple = async (
   sessionId: string,
   saveSession: (sessionId: string, name?: string) => Promise<void>,
 ) => {
-  const result = await useQuery(process.env["GQL_URL"], appleLoginMutation, {
+  const result = await useQuery(process.env["GQL_URL"], appleLoginQuery, {
     sessionId: sessionId, //: "MvQBt1TQxqPS_CEGyoT93ckgVjOU3fv4",
     credential,
   })
@@ -68,12 +68,32 @@ const loginWithApple = async (
   console.log(data)
 }
 
+const appleSignUp = async (
+  credential: AppleAuthentication.AppleAuthenticationCredential,
+  saveSession: (sessionId: string, name?: string) => Promise<void>,
+) => {
+  const result = await useQuery(process.env["GQL_URL"], appleSignupMutation, {
+    credential,
+  })
+
+  const data = await result.json()
+
+  const receivedSessionId = data.data.appleSignIn.sessionId
+  const name = data.data.appleSignIn.name
+
+  if (receivedSessionId) {
+    await saveSession(receivedSessionId, name ?? undefined)
+    await SecureStore.setItemAsync("sessionId", receivedSessionId)
+  }
+}
+
 export const LoginScreen = observer(function LoginScreen() {
   const inset = useSafeAreaInsets()
   const { usersStore } = useStores()
 
   return (
     <Screen style={[ROOT, { paddingBottom: inset.bottom }]} preset="fixed">
+      <Text>{usersStore.currentUser.name}</Text>
       <Text>{usersStore.currentUser.sessionId ?? "no session found"}</Text>
       <Button title="debug" onPress={debug} />
       <AppleAuthentication.AppleAuthenticationButton
@@ -99,7 +119,7 @@ export const LoginScreen = observer(function LoginScreen() {
                 usersStore.saveCurrentUser,
               )
             } else {
-              // signUp();
+              appleSignUp(credential, usersStore.saveCurrentUser)
             }
           } catch (error) {
             console.log(error)

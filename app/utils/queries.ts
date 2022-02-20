@@ -7,9 +7,20 @@ export const testAppleLoginQuery = `
     }
   }`
 
-export const appleLoginMutation = `
-mutation AppleSignInn($credential: AppleAuthenticationCredential!, $sessionId: String) {
+export const appleLoginQuery = `
+query AppleSignIn($credential: AppleAuthenticationCredential!, $sessionId: String) {
     appleSignIn(credential: $credential, sessionId: $sessionId) {
+      message
+      data
+      sessionId
+      success
+      name
+    }
+  }`
+
+export const appleSignupMutation = `
+mutation AppleSignIn($credential: AppleAuthenticationCredential!) {
+    appleSignUp(credential: $credential) {
       message
       data
       sessionId

@@ -55,7 +55,7 @@ export async function setupRootStore() {
   onSnapshot(rootStore, (snapshot) => {
     const newSnapshot = snapshot
 
-    newSnapshot.usersStore.currentUser = null
+    newSnapshot.usersStore.currentUser.sessionId = null
 
     storage.save(ROOT_STATE_STORAGE_KEY, newSnapshot)
   })
