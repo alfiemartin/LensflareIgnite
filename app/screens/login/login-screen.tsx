@@ -8,7 +8,7 @@ import { useQuery } from "../../utils/general"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import * as SecureStore from "expo-secure-store"
 import { useStores } from "../../models"
-import { testAppleLoginQuery } from "../../utils/queries"
+import { appleLoginMutation, testAppleLoginQuery } from "../../utils/queries"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.almostWhite,
@@ -48,10 +48,24 @@ const debug = async () => {
 const loginWithApple = async (
   credential: AppleAuthentication.AppleAuthenticationCredential,
   sessionId: string,
-  saveSession: (sessionId: string) => Promise<void>,
+  saveSession: (sessionId: string, name?: string) => Promise<void>,
 ) => {
-  //this is only reached if user is already signed up
-  // const result = useQuery("")
+  const result = await useQuery(process.env["GQL_URL"], appleLoginMutation, {
+    sessionId: sessionId, //: "MvQBt1TQxqPS_CEGyoT93ckgVjOU3fv4",
+    credential,
+  })
+
+  const data = await result.json()
+
+  const receivedSessionId = data.data.appleSignIn.sessionId
+  const name = data.data.appleSignIn.name
+
+  if (receivedSessionId) {
+    await saveSession(receivedSessionId, name ?? undefined)
+    await SecureStore.setItemAsync("sessionId", receivedSessionId)
+  }
+
+  console.log(data)
 }
 
 export const LoginScreen = observer(function LoginScreen() {

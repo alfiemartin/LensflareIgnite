@@ -27,8 +27,12 @@ export const UsersStoreModel = types
     },
   }))
   .actions((self) => ({
-    saveCurrentUser: async (sessionId: string) => {
+    saveCurrentUser: async (sessionId: string, name?: string) => {
       self.currentUser.sessionId = sessionId
+
+      if (name) {
+        self.currentUser.name = name
+      }
     },
   }))
   .actions((self) => ({
@@ -37,6 +41,15 @@ export const UsersStoreModel = types
         const result = await SecureStore.getItemAsync("sessionId")
 
         if (result) self.saveCurrentUser(result)
+      } catch (e) {
+        console.log(e)
+      }
+    },
+  }))
+  .actions((self) => ({
+    destorySavedUserFromKeychain: async () => {
+      try {
+        await SecureStore.deleteItemAsync("sessionId")
       } catch (e) {
         console.log(e)
       }
