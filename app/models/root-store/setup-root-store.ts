@@ -43,6 +43,8 @@ export async function setupRootStore() {
   }
 
   await rootStore.usersStore.getSavedUser()
+  // await rootStore.usersStore.saveCurrentUser(undefined)
+  // await storage.clear()
 
   // reactotron logging
   if (__DEV__) {
@@ -53,10 +55,9 @@ export async function setupRootStore() {
   onSnapshot(rootStore, (snapshot) => {
     const newSnapshot = snapshot
 
-    //do not save session data to async storage
     newSnapshot.usersStore.currentUser = null
 
-    storage.save(ROOT_STATE_STORAGE_KEY, snapshot)
+    storage.save(ROOT_STATE_STORAGE_KEY, newSnapshot)
   })
 
   return rootStore
