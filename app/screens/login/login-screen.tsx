@@ -41,7 +41,8 @@ const BUTTON: TextStyle = {
 const debug = async () => {
   const result = await useQuery(process.env["GQL_URL"], testAppleLoginQuery)
 
-  const data = await result.json()
+  const { data } = await result.json()
+
   console.log(data)
 }
 
@@ -55,10 +56,10 @@ const loginWithApple = async (
     credential,
   })
 
-  const data = await result.json()
+  const { data } = await result.json()
 
-  const receivedSessionId = data.data.appleSignIn.sessionId
-  const name = data.data.appleSignIn.name
+  const receivedSessionId = data.appleSignIn.sessionId
+  const name = data.appleSignIn.name
 
   if (receivedSessionId) {
     await saveSession(receivedSessionId, name ?? undefined)
@@ -72,17 +73,18 @@ const appleSignUp = async (
   credential: AppleAuthentication.AppleAuthenticationCredential,
   saveSession: (sessionId: string, name?: string) => Promise<void>,
 ) => {
+  //TODO process.env
   const result = await useQuery(process.env["GQL_URL"], appleSignupMutation, {
     credential,
   })
 
   const data = await result.json()
-
-  const receivedSessionId = data.data.appleSignIn.sessionId
-  const name = data.data.appleSignIn.name
+  console.log(data)
+  const receivedSessionId = data.data.appleSignUp.sessionId
+  const name = data.data.appleSignUp.name
 
   if (receivedSessionId) {
-    await saveSession(receivedSessionId, name ?? undefined)
+    await saveSession(receivedSessionId, name)
     await SecureStore.setItemAsync("sessionId", receivedSessionId)
   }
 }
@@ -113,13 +115,13 @@ export const LoginScreen = observer(function LoginScreen() {
             })
 
             if (!credential.fullName.givenName) {
+              appleSignUp(credential, usersStore.saveCurrentUser)
+            } else {
               loginWithApple(
                 credential,
                 usersStore.currentUser.sessionId,
                 usersStore.saveCurrentUser,
               )
-            } else {
-              appleSignUp(credential, usersStore.saveCurrentUser)
             }
           } catch (error) {
             console.log(error)

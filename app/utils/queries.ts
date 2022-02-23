@@ -4,6 +4,7 @@ export const testAppleLoginQuery = `
       message
       sessionId
       success
+      name
     }
   }`
 
@@ -19,7 +20,7 @@ query AppleSignIn($credential: AppleAuthenticationCredential!, $sessionId: Strin
   }`
 
 export const appleSignupMutation = `
-mutation AppleSignIn($credential: AppleAuthenticationCredential!) {
+mutation AppleSignUp($credential: AppleAuthenticationCredential!) {
     appleSignUp(credential: $credential) {
       message
       data

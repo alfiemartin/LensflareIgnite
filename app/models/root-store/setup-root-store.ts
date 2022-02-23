@@ -1,7 +1,8 @@
-import { onSnapshot } from "mobx-state-tree"
+import { onSnapshot, getSnapshot } from "mobx-state-tree"
 import { RootStoreModel, RootStore } from "./root-store"
 import { Environment } from "../environment"
 import * as storage from "../../utils/storage"
+import cloneDeep from "lodash.clonedeep"
 
 /**
  * The key we'll be saving our state as within async storage.
@@ -33,6 +34,7 @@ export async function setupRootStore() {
   try {
     // load data from storage
     data = (await storage.load(ROOT_STATE_STORAGE_KEY)) || {}
+    // console.log(data.usersStore)
     rootStore = RootStoreModel.create(data, env)
   } catch (e) {
     // if there's any problems loading, then let's at least fallback to an empty state
@@ -50,12 +52,14 @@ export async function setupRootStore() {
   if (__DEV__) {
     env.reactotron.setRootStore(rootStore, data)
   }
+  // const { name, sessionId } = rootStore.usersStore.currentUser
 
   // track changes & save to storage
   onSnapshot(rootStore, (snapshot) => {
-    const newSnapshot = snapshot
+    const newSnapshot = cloneDeep(snapshot)
 
     newSnapshot.usersStore.currentUser.sessionId = null
+    newSnapshot.usersStore.currentUser.name = null
 
     storage.save(ROOT_STATE_STORAGE_KEY, newSnapshot)
   })

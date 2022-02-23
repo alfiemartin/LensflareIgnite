@@ -27,12 +27,9 @@ export const UsersStoreModel = types
     },
   }))
   .actions((self) => ({
-    saveCurrentUser: async (sessionId: string, name?: string) => {
+    saveCurrentUser: async (sessionId: string, name?: string | null) => {
       self.currentUser.sessionId = sessionId
-
-      if (name) {
-        self.currentUser.name = name
-      }
+      self.currentUser.name = name
     },
   }))
   .actions((self) => ({
