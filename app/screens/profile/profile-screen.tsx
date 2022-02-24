@@ -62,45 +62,49 @@ export const ProfileScreen = observer(function ProfileScreen() {
   }
 
   return (
-    <Screen style={ROOT}>
-      <View style={[HEADER, { backgroundColor: "black" }]}>
-        <View style={HEADER_LEFT}>
-          <ProfileIcon imageStyles={HEADER_ICON} size={65} image={profiles[0].image} />
-        </View>
-        <EasyIcon
-          name="settings-sharp"
-          size={60}
-          color={color.palette.almostWhite}
-          onPress={showSettings}
-        />
-      </View>
-      <CurvedScreenBox>
-        <ScrollView style={SCROLL_VIEW}>
-          <Grid>
-            <Col style={{ marginRight: 5 }}>
-              <View style={{ position: "relative" }}>
-                <ImageBox
-                  touchableProps={{ onPress: showUserList }}
-                  image={profiles[0].image}
-                  text="Friends"
-                />
-              </View>
-            </Col>
-            <Col style={{ marginLeft: 5 }}>
+    <>
+      {profiles && (
+        <Screen style={ROOT}>
+          <View style={[HEADER, { backgroundColor: "black" }]}>
+            <View style={HEADER_LEFT}>
+              <ProfileIcon imageStyles={HEADER_ICON} size={65} image={profiles[0].image} />
+            </View>
+            <EasyIcon
+              name="settings-sharp"
+              size={60}
+              color={color.palette.almostWhite}
+              onPress={showSettings}
+            />
+          </View>
+          <CurvedScreenBox>
+            <ScrollView style={SCROLL_VIEW}>
+              <Grid>
+                <Col style={{ marginRight: 5 }}>
+                  <View style={{ position: "relative" }}>
+                    <ImageBox
+                      touchableProps={{ onPress: showUserList }}
+                      image={profiles[0].image}
+                      text="Friends"
+                    />
+                  </View>
+                </Col>
+                <Col style={{ marginLeft: 5 }}>
+                  <ImageBox
+                    touchableProps={{ onPress: showUserList }}
+                    image={profiles[1].image}
+                    text="Followers"
+                  />
+                </Col>
+              </Grid>
               <ImageBox
-                touchableProps={{ onPress: showUserList }}
-                image={profiles[1].image}
-                text="Followers"
+                touchableProps={{ onPress: showProfile }}
+                image={profiles[2].image}
+                text="My Profile"
               />
-            </Col>
-          </Grid>
-          <ImageBox
-            touchableProps={{ onPress: showProfile }}
-            image={profiles[2].image}
-            text="My Profile"
-          />
-        </ScrollView>
-      </CurvedScreenBox>
-    </Screen>
+            </ScrollView>
+          </CurvedScreenBox>
+        </Screen>
+      )}
+    </>
   )
 })

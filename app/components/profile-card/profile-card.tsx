@@ -82,7 +82,7 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
       style={[styles, aSwipeStyles, { zIndex: state == "CURRENT" ? 5 : 10 }]}
     >
       <ImageBackground
-        source={{ uri: data && data.data.image }}
+        source={{ uri: data?.data?.image }}
         style={MAIN_IMAGE_CONTAINER}
         imageStyle={MAIN_IMAGE}
       >

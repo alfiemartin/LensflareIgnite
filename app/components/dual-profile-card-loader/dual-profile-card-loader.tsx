@@ -3,7 +3,7 @@ import { Dimensions, StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { CardFooter, ProfileCard, TState } from ".."
 import { ProfileCardSnapshot, useStores } from "../../models"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { PanGestureHandler } from "react-native-gesture-handler"
 import Animated, {
   interpolate,
@@ -42,6 +42,12 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
 
   const { profileCardStore } = useStores()
   const { profiles } = profileCardStore
+
+  useEffect(() => {
+    ;(async () => {
+      await profileCardStore.getProfileCards()
+    })()
+  }, [])
 
   const screenWidth = Dimensions.get("screen").width
 
@@ -210,9 +216,10 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
     <View style={styles}>
       <PanGestureHandler onGestureEvent={gestureHandler}>
         <Animated.View style={{ flex: 1 }}>
-          {cardData.map((card, i) => {
-            return <ProfileCard key={i} data={card} state={card.state} />
-          })}
+          {profiles.length > 0 &&
+            cardData.map((card, i) => {
+              return <ProfileCard key={i} data={card} state={card.state} />
+            })}
         </Animated.View>
       </PanGestureHandler>
       <CardFooter />

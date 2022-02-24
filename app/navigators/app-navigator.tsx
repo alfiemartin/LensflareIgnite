@@ -28,6 +28,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { color } from "../theme"
 import { TabIcon } from "../components"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { useStores } from "../models"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -136,13 +137,13 @@ const AppTabBar = () => {
         component={CameraScreen}
         options={{ tabBarIcon: ({ color }) => <TabIcon color={color} icon="camera-outline" /> }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="matches"
         component={MatchesScreen}
         options={{
           tabBarIcon: ({ color }) => <TabIcon color={color} icon="chatbox-ellipses-outline" />,
         }}
-      />
+      /> */}
       <Tab.Screen
         name="profile"
         component={ProfileScreen}
@@ -158,14 +159,15 @@ export const AppNavigator = (props: NavigationProps) => {
   const colorScheme = useColorScheme()
   useBackButtonHandler(canExit)
 
+  const { usersStore } = useStores()
+
   return (
     <NavigationContainer
       ref={navigationRef}
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
       {...props}
     >
-      {/* <AppStack /> */}
-      <OnboardingStack />
+      {usersStore.currentUser.sessionId ? <AppStack /> : <OnboardingStack />}
     </NavigationContainer>
   )
 }

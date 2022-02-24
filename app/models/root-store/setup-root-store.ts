@@ -45,8 +45,11 @@ export async function setupRootStore() {
   }
 
   await rootStore.usersStore.getSavedUser()
+  await rootStore.profileCardStore.getProfileCards()
   // await rootStore.usersStore.saveCurrentUser(undefined)
   // await storage.clear()
+
+  // await rootStore.usersStore.destorySavedUserFromKeychain()
 
   // reactotron logging
   if (__DEV__) {

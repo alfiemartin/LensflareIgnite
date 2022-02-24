@@ -62,7 +62,7 @@ const loginWithApple = async (
   const name = data.appleSignIn.name
 
   if (receivedSessionId) {
-    await saveSession(receivedSessionId, name ?? undefined)
+    await saveSession(receivedSessionId, name)
     await SecureStore.setItemAsync("sessionId", receivedSessionId)
   }
 
@@ -115,13 +115,13 @@ export const LoginScreen = observer(function LoginScreen() {
             })
 
             if (!credential.fullName.givenName) {
-              appleSignUp(credential, usersStore.saveCurrentUser)
-            } else {
               loginWithApple(
                 credential,
                 usersStore.currentUser.sessionId,
                 usersStore.saveCurrentUser,
               )
+            } else {
+              appleSignUp(credential, usersStore.saveCurrentUser)
             }
           } catch (error) {
             console.log(error)
