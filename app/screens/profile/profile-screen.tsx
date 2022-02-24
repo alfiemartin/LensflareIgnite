@@ -1,19 +1,10 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { ImageStyle, ScrollView, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
-import {
-  CurvedScreenBox,
-  EasyIcon,
-  GradientBackground,
-  ImageBox,
-  ProfileIcon,
-  Screen,
-  Text,
-} from "../../components"
+import { ImageStyle, ScrollView, View, ViewStyle } from "react-native"
+import { CurvedScreenBox, EasyIcon, ImageBox, ProfileIcon, Screen } from "../../components"
 import { color, spacing } from "../../theme"
 import { useStores } from "../../models"
 import { Col, Grid } from "react-native-easy-grid"
-import { Shadow } from "react-native-shadow-2"
 import { useNavigation } from "@react-navigation/native"
 
 const ROOT: ViewStyle = {
@@ -61,10 +52,16 @@ export const ProfileScreen = observer(function ProfileScreen() {
     navigation.navigate("settings" as any)
   }
 
+  useEffect(() => {
+    ;(async () => {
+      await profileCardStore.getProfileCards()
+    })()
+  }, [])
+
   return (
-    <>
-      {profiles && (
-        <Screen style={ROOT}>
+    <Screen style={ROOT}>
+      {profiles.length > 0 && (
+        <>
           <View style={[HEADER, { backgroundColor: "black" }]}>
             <View style={HEADER_LEFT}>
               <ProfileIcon imageStyles={HEADER_ICON} size={65} image={profiles[0].image} />
@@ -103,8 +100,8 @@ export const ProfileScreen = observer(function ProfileScreen() {
               />
             </ScrollView>
           </CurvedScreenBox>
-        </Screen>
+        </>
       )}
-    </>
+    </Screen>
   )
 })

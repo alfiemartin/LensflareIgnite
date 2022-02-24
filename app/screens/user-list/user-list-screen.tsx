@@ -18,16 +18,17 @@ export const UserListScreen = observer(function UserListScreen() {
 
   useEffect(() => {
     ;(async () => {
-      usersStore.getUsers()
+      await usersStore.getUsers()
     })()
-  })
+  }, [])
 
   return (
     <Screen style={ROOT} preset="scroll">
       <Text preset="header" text="" />
-      {users.map((user) => {
-        return <ChatPreview key={user._id} name={user.name} image={user.avatar} />
-      })}
+      {users &&
+        users.map((user) => {
+          return <ChatPreview key={user._id} name={user.name} image={user.avatar} />
+        })}
     </Screen>
   )
 })

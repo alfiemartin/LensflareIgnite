@@ -1,8 +1,9 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
 import { DualProfileCardLoader, Screen } from "../../components"
 import { color } from "../../theme"
+import { useStores } from "../../models"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.fullBlack,
@@ -17,11 +18,18 @@ const CARD_CONTAINER: ViewStyle = {
 }
 
 export const ExplorerScreen = observer(function ExplorerScreen(props) {
+  const { profileCardStore } = useStores()
+  const { profiles } = profileCardStore
+
+  useEffect(() => {
+    ;(async () => {
+      await profileCardStore.getProfileCards()
+    })()
+  }, [])
+
   return (
     <Screen style={ROOT} statusBar="dark-content">
-      <View style={CARD_CONTAINER}>
-        <DualProfileCardLoader />
-      </View>
+      <View style={CARD_CONTAINER}>{profiles.length > 0 && <DualProfileCardLoader />}</View>
     </Screen>
   )
 })

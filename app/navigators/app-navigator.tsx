@@ -81,10 +81,10 @@ const AppStack = () => {
       initialRouteName="tabBar"
     >
       <Stack.Screen name="tabBar" component={AppTabBar} />
-      <Stack.Screen name="chat" options={{ headerShown: true }} component={ChatScreen} />
+      {/* <Stack.Screen name="chat" options={{ headerShown: true }} component={ChatScreen} />
       <Stack.Screen name="profileEditor" component={ProfileEditorScreen} />
       <Stack.Screen name="userList" component={UserListScreen} />
-      <Stack.Screen name="settings" component={SettingsScreen} />
+      <Stack.Screen name="settings" component={SettingsScreen} /> */}
     </Stack.Navigator>
   )
 }
@@ -137,13 +137,13 @@ const AppTabBar = () => {
         component={CameraScreen}
         options={{ tabBarIcon: ({ color }) => <TabIcon color={color} icon="camera-outline" /> }}
       />
-      {/* <Tab.Screen
+      <Tab.Screen
         name="matches"
         component={MatchesScreen}
         options={{
           tabBarIcon: ({ color }) => <TabIcon color={color} icon="chatbox-ellipses-outline" />,
         }}
-      /> */}
+      />
       <Tab.Screen
         name="profile"
         component={ProfileScreen}
@@ -167,7 +167,8 @@ export const AppNavigator = (props: NavigationProps) => {
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
       {...props}
     >
-      {usersStore.currentUser.sessionId ? <AppStack /> : <OnboardingStack />}
+      {/* {usersStore.currentUser.sessionId ? <AppStack /> : <OnboardingStack />} */}
+      <AppStack />
     </NavigationContainer>
   )
 }

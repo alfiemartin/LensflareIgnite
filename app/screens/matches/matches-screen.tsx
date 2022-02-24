@@ -34,50 +34,54 @@ const TOP_BAR_PROFILES: ViewStyle = {
 
 export const MatchesScreen = observer(function MatchesScreen() {
   // Pull in one of our MST stores
-  const { usersStore, profileCardStore } = useStores()
+  const { usersStore } = useStores()
   const { users } = usersStore
 
   useEffect(() => {
     ;(async () => {
-      await usersStore.getUsers(0)
+      await usersStore.getUsers()
     })()
   }, [])
 
   return (
     <Screen style={ROOT}>
-      <View style={TOP_BAR}>
-        <View style={NEWCHAT_CONTAINER}>
-          <EasyIcon name="add" size={50} color={color.palette.white} />
-        </View>
-        <View style={TOP_BAR_PROFILES}>
-          {users
-            .filter((x) => x._id < 3)
-            .map((user) => {
-              return (
-                <ProfileIcon
-                  style={{ marginLeft: spacing[3] }}
-                  key={user._id}
-                  image={user.avatar}
-                  size={65}
-                />
-              )
-            })}
-        </View>
-      </View>
-      <CurvedScreenBox>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {users.map(({ avatar, _id, name }, i) => {
-            return (
-              <ChatPreview
-                key={_id}
-                name={name}
-                image={avatar}
-                borderStyle={{ borderBottomWidth: 0 }}
-              />
-            )
-          })}
-        </ScrollView>
-      </CurvedScreenBox>
+      {users.length > 0 && (
+        <>
+          <View style={TOP_BAR}>
+            <View style={NEWCHAT_CONTAINER}>
+              <EasyIcon name="add" size={50} color={color.palette.white} />
+            </View>
+            <View style={TOP_BAR_PROFILES}>
+              {users
+                .filter((x) => x._id < 3)
+                .map((user) => {
+                  return (
+                    <ProfileIcon
+                      style={{ marginLeft: spacing[3] }}
+                      key={user._id}
+                      image={user.avatar}
+                      size={65}
+                    />
+                  )
+                })}
+            </View>
+          </View>
+          <CurvedScreenBox>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              {users.map(({ avatar, _id, name }, i) => {
+                return (
+                  <ChatPreview
+                    key={_id}
+                    name={name}
+                    image={avatar}
+                    borderStyle={{ borderBottomWidth: 0 }}
+                  />
+                )
+              })}
+            </ScrollView>
+          </CurvedScreenBox>
+        </>
+      )}
     </Screen>
   )
 })

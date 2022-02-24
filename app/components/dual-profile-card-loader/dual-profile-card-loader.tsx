@@ -43,35 +43,34 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
   const { profileCardStore } = useStores()
   const { profiles } = profileCardStore
 
+  const [cardData, setCardData] = useState<ICardState[]>()
+
   useEffect(() => {
-    ;(async () => {
-      await profileCardStore.getProfileCards()
-    })()
+    const initialCardState: ICardState[] = [
+      {
+        counter: 0,
+        translationX: -screenWidth,
+        state: "PREV",
+        data: profiles[0],
+      },
+      {
+        counter: 0,
+        translationX: 0,
+        state: "CURRENT",
+        data: profiles[0],
+      },
+      {
+        counter: 1,
+        translationX: screenWidth,
+        state: "NEXT",
+        data: profiles[1],
+      },
+    ]
+
+    setCardData(initialCardState)
   }, [])
 
   const screenWidth = Dimensions.get("screen").width
-
-  const initialCardState: ICardState[] = [
-    {
-      counter: 0,
-      translationX: -screenWidth,
-      state: "PREV",
-      data: profiles[0],
-    },
-    {
-      counter: 0,
-      translationX: 0,
-      state: "CURRENT",
-      data: profiles[0],
-    },
-    {
-      counter: 1,
-      translationX: screenWidth,
-      state: "NEXT",
-      data: profiles[1],
-    },
-  ]
-  const [cardData, setCardData] = useState(initialCardState)
 
   const bringNewCard = (state: TState) => {
     setCardData((prevData) => {
@@ -214,15 +213,18 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
 
   return (
     <View style={styles}>
-      <PanGestureHandler onGestureEvent={gestureHandler}>
-        <Animated.View style={{ flex: 1 }}>
-          {profiles.length > 0 &&
-            cardData.map((card, i) => {
-              return <ProfileCard key={i} data={card} state={card.state} />
-            })}
-        </Animated.View>
-      </PanGestureHandler>
-      <CardFooter />
+      {cardData?.length > 0 && (
+        <>
+          <PanGestureHandler onGestureEvent={gestureHandler}>
+            <Animated.View style={{ flex: 1 }}>
+              {cardData.map((card, i) => {
+                return <ProfileCard key={i} data={card} state={card.state} />
+              })}
+            </Animated.View>
+          </PanGestureHandler>
+          <CardFooter />
+        </>
+      )}
     </View>
   )
 })

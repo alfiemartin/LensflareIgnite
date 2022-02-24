@@ -39,7 +39,7 @@ export const UsersStoreModel = types
 
         if (result) self.saveCurrentUser(result)
       } catch (e) {
-        console.log(e)
+        console.tron.log(e)
       }
     },
   }))
@@ -48,7 +48,7 @@ export const UsersStoreModel = types
       try {
         await SecureStore.deleteItemAsync("sessionId")
       } catch (e) {
-        console.log(e)
+        console.tron.log(e)
       }
     },
   }))

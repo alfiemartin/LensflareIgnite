@@ -33,9 +33,11 @@ export async function setupRootStore() {
   const env = await createEnvironment()
   try {
     // load data from storage
-    data = (await storage.load(ROOT_STATE_STORAGE_KEY)) || {}
+
+    // data = (await storage.load(ROOT_STATE_STORAGE_KEY)) || {}
+
     // console.log(data.usersStore)
-    rootStore = RootStoreModel.create(data, env)
+    rootStore = RootStoreModel.create({}, env)
   } catch (e) {
     // if there's any problems loading, then let's at least fallback to an empty state
     // instead of crashing.
@@ -45,8 +47,7 @@ export async function setupRootStore() {
   }
 
   await rootStore.usersStore.getSavedUser()
-  await rootStore.profileCardStore.getProfileCards()
-  // await rootStore.usersStore.saveCurrentUser(undefined)
+  // await rootStore.profileCardStore.getProfileCards()
   // await storage.clear()
 
   // await rootStore.usersStore.destorySavedUserFromKeychain()
