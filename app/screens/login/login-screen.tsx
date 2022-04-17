@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react"
+import React from "react"
 import { observer } from "mobx-react-lite"
-import { StyleProp, TextInput, TextStyle, View, ViewStyle, Button } from "react-native"
+import { StyleProp, TextStyle, ViewStyle, Button } from "react-native"
 import { Screen, Text } from "../../components"
 import { color, spacing } from "../../theme"
 import * as AppleAuthentication from "expo-apple-authentication"

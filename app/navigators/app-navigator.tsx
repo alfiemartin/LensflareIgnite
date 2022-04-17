@@ -81,10 +81,10 @@ const AppStack = () => {
       initialRouteName="tabBar"
     >
       <Stack.Screen name="tabBar" component={AppTabBar} />
-      {/* <Stack.Screen name="chat" options={{ headerShown: true }} component={ChatScreen} />
+      <Stack.Screen name="chat" options={{ headerShown: true }} component={ChatScreen} />
       <Stack.Screen name="profileEditor" component={ProfileEditorScreen} />
       <Stack.Screen name="userList" component={UserListScreen} />
-      <Stack.Screen name="settings" component={SettingsScreen} /> */}
+      <Stack.Screen name="settings" component={SettingsScreen} />
     </Stack.Navigator>
   )
 }
@@ -167,8 +167,7 @@ export const AppNavigator = (props: NavigationProps) => {
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
       {...props}
     >
-      {/* {usersStore.currentUser.sessionId ? <AppStack /> : <OnboardingStack />} */}
-      <AppStack />
+      {usersStore.currentUser.sessionId ? <AppStack /> : <OnboardingStack />}
     </NavigationContainer>
   )
 }

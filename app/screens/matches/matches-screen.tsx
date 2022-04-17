@@ -1,9 +1,9 @@
 import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
-import { ChatPreview, CurvedScreenBox, EasyIcon, ProfileIcon, Screen, Text } from "../../components"
+import { ChatPreview, CurvedScreenBox, EasyIcon, ProfileIcon, Screen } from "../../components"
 import { color, spacing } from "../../theme"
-import { FlatList, ScrollView } from "react-native-gesture-handler"
+import { ScrollView } from "react-native-gesture-handler"
 import { useStores } from "../../models"
 
 const ROOT: ViewStyle = {
