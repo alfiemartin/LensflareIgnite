@@ -114,7 +114,7 @@ const AppTabBar = () => {
     tabBarItemStyle: { marginBottom: inset.bottom },
     tabBarIndicator: () => null,
     tabBarContentContainerStyle: {
-      backgroundColor: color.palette.fullBlack, //tab bar background
+      backgroundColor: color.palette.fullBlack, //  tab bar background
     },
     tabBarLabel: () => null,
     tabBarInactiveTintColor: color.palette.offWhite,
@@ -153,13 +153,13 @@ const AppTabBar = () => {
   )
 }
 
-interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
+interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {
+  usersStore?: any
+}
 
 export const AppNavigator = (props: NavigationProps) => {
   const colorScheme = useColorScheme()
   useBackButtonHandler(canExit)
-
-  const { usersStore } = useStores()
 
   return (
     <NavigationContainer
@@ -167,7 +167,7 @@ export const AppNavigator = (props: NavigationProps) => {
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
       {...props}
     >
-      {usersStore.currentUser.sessionId ? <AppStack /> : <OnboardingStack />}
+      {props.usersStore.currentUser.sessionId ? <AppStack /> : <OnboardingStack />}
     </NavigationContainer>
   )
 }

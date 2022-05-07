@@ -25,7 +25,7 @@ const CAMERA_CONTAINER: ViewStyle = {
 export const CameraScreen = observer(function CameraScreen() {
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
-  const [hasPermission, setHasPermission] = useState<Boolean | null>(null)
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null)
   const [type, setType] = useState(Camera.Constants.Type.front)
 
   useEffect(() => {

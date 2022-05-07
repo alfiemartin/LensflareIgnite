@@ -39,7 +39,7 @@ const BUTTON: TextStyle = {
 }
 
 const debug = async () => {
-  const result = await useQuery(process.env["GQL_URL"], testAppleLoginQuery)
+  const result = await useQuery(process.env.GQL_URL, testAppleLoginQuery)
 
   const { data } = await result.json()
 
@@ -51,8 +51,8 @@ const loginWithApple = async (
   sessionId: string,
   saveSession: (sessionId: string, name?: string) => Promise<void>,
 ) => {
-  const result = await useQuery(process.env["GQL_URL"], appleLoginQuery, {
-    sessionId: sessionId, //: "MvQBt1TQxqPS_CEGyoT93ckgVjOU3fv4",
+  const result = await useQuery(process.env.GQL_URL, appleLoginQuery, {
+    sessionId: sessionId, //  "MvQBt1TQxqPS_CEGyoT93ckgVjOU3fv4",
     credential,
   })
 
@@ -73,8 +73,8 @@ const appleSignUp = async (
   credential: AppleAuthentication.AppleAuthenticationCredential,
   saveSession: (sessionId: string, name?: string) => Promise<void>,
 ) => {
-  //TODO process.env
-  const result = await useQuery(process.env["GQL_URL"], appleSignupMutation, {
+  //  TODO process.env
+  const result = await useQuery(process.env.GQL_URL, appleSignupMutation, {
     credential,
   })
 
