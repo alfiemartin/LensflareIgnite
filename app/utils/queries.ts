@@ -19,6 +19,21 @@ query AppleSignIn($credential: AppleAuthenticationCredential!, $sessionId: Strin
     }
   }`
 
+export const getAllPostsQuery = `
+query GetPosts {
+  getPosts {
+    _id
+    posterName
+    posterProfilePic
+    postImage
+    geometry {
+      coordinates
+      type
+    }
+  }
+}
+`
+
 export const appleSignupMutation = `
 mutation AppleSignUp($credential: AppleAuthenticationCredential!) {
     appleSignUp(credential: $credential) {

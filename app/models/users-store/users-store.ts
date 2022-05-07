@@ -4,6 +4,8 @@ import { mockUser } from "../../../mockData"
 import { withEnvironment } from "../extensions/with-environment"
 import { CurrentUserModel } from "../current-user/current-user"
 import * as SecureStore from "expo-secure-store"
+import { useQuery } from "../../utils/general"
+import { getAllPostsQuery } from "../../utils/queries"
 
 /**
  * Model description here for TypeScript hints.
@@ -21,15 +23,26 @@ export const UsersStoreModel = types
     },
   }))
   .actions((self) => ({
-    getUsers: async (userId?: number) => {
+    getUsers: async () => {
       const users = mockUser
       self.saveUsers(users)
+    },
+  }))
+  .actions((self) => ({
+    getUsersFromServer: async () => {
+      const users = await useQuery(process.env.GQL_URL, getAllPostsQuery).then((res) => res.json())
+      console.log(await users)
     },
   }))
   .actions((self) => ({
     saveCurrentUser: async (sessionId: string, name?: string | null) => {
       self.currentUser.sessionId = sessionId
       self.currentUser.name = name
+    },
+  }))
+  .actions((self) => ({
+    deleteCurrentUser: async () => {
+      self.currentUser = undefined
     },
   }))
   .actions((self) => ({
@@ -43,7 +56,7 @@ export const UsersStoreModel = types
       }
     },
   }))
-  .actions((self) => ({
+  .actions(() => ({
     destorySavedUserFromKeychain: async () => {
       try {
         await SecureStore.deleteItemAsync("sessionId")

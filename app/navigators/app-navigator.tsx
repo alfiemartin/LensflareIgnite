@@ -29,6 +29,7 @@ import { color } from "../theme"
 import { TabIcon } from "../components"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { useStores } from "../models"
+import { observer } from "mobx-react-lite"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -157,9 +158,11 @@ interface NavigationProps extends Partial<React.ComponentProps<typeof Navigation
   usersStore?: any
 }
 
-export const AppNavigator = (props: NavigationProps) => {
+export const AppNavigator = observer(function AppNavigator(props: NavigationProps) {
   const colorScheme = useColorScheme()
   useBackButtonHandler(canExit)
+
+  const { usersStore } = useStores()
 
   return (
     <NavigationContainer
@@ -167,10 +170,10 @@ export const AppNavigator = (props: NavigationProps) => {
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
       {...props}
     >
-      {props.usersStore.currentUser.sessionId ? <AppStack /> : <OnboardingStack />}
+      {usersStore?.currentUser?.sessionId ? <AppStack /> : <OnboardingStack />}
     </NavigationContainer>
   )
-}
+})
 
 AppNavigator.displayName = "AppNavigator"
 

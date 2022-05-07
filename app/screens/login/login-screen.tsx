@@ -1,7 +1,8 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { StyleProp, TextStyle, ViewStyle, Button } from "react-native"
-import { Screen, Text } from "../../components"
+import { ViewStyle, Button, View } from "react-native"
+import * as storage from "../../utils/storage/storage"
+import { ClearStorageButton, Screen, Text } from "../../components"
 import { color, spacing } from "../../theme"
 import * as AppleAuthentication from "expo-apple-authentication"
 import { useQuery } from "../../utils/general"
@@ -14,28 +15,8 @@ const ROOT: ViewStyle = {
   backgroundColor: color.palette.almostWhite,
   padding: spacing[1],
   flex: 1,
-  justifyContent: "flex-end",
+  justifyContent: "space-between",
   alignItems: "center",
-}
-
-const TEXT: StyleProp<TextStyle> = {
-  fontSize: 42,
-  width: "100%",
-  textAlign: "center",
-  fontWeight: "bold",
-}
-
-const INPUT: StyleProp<TextStyle> = {
-  fontSize: 26,
-  marginBottom: spacing[3],
-  fontWeight: "400",
-}
-
-const BUTTON: TextStyle = {
-  fontSize: 42,
-  fontWeight: "bold",
-  backgroundColor: color.palette.fullBlack,
-  borderWidth: 0,
 }
 
 const debug = async () => {
@@ -95,9 +76,13 @@ export const LoginScreen = observer(function LoginScreen() {
 
   return (
     <Screen style={[ROOT, { paddingBottom: inset.bottom }]} preset="fixed">
-      <Text>{usersStore.currentUser.name}</Text>
-      <Text>{usersStore.currentUser.sessionId ?? "no session found"}</Text>
-      <Button title="debug" onPress={debug} />
+      <ClearStorageButton />
+      <View></View>
+      <View>
+        <Text>{usersStore.currentUser.name}</Text>
+        <Text>{usersStore.currentUser.sessionId ?? "no session found"}</Text>
+        <Button title="debug" onPress={debug} />
+      </View>
       <AppleAuthentication.AppleAuthenticationButton
         buttonType={AppleAuthentication.AppleAuthenticationButtonType.CONTINUE}
         buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
