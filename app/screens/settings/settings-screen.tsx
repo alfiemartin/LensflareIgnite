@@ -14,13 +14,13 @@ const ROOT: ViewStyle = {
 
 export const SettingsScreen = observer(function SettingsScreen() {
   // Pull in one of our MST stores
-  const { usersStore } = useStores()
+  const { profileCardStore } = useStores()
 
   return (
     <Screen style={ROOT} preset="scroll">
       <Text preset="header" text="Settings" />
       <ClearStorageButton />
-      <Button title="getPosts" onPress={usersStore.getUsersFromServer} />
+      <Button title="getPosts" onPress={profileCardStore.getPostsFromServer} />
     </Screen>
   )
 })

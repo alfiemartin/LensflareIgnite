@@ -4,7 +4,7 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
  * Model description here for TypeScript hints.
  */
 export const ProfileCardModel = types.model("ProfileCard").props({
-  id: types.identifierNumber,
+  id: types.union(types.identifierNumber, types.string),
   name: types.string,
   image: types.string,
 })

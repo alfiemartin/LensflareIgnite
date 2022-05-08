@@ -1,11 +1,12 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { UserModel, UserSnapshot } from "../user/user"
+import { UserModel, UserType } from "../user/user"
 import { mockUser } from "../../../mockData"
 import { withEnvironment } from "../extensions/with-environment"
 import { CurrentUserModel } from "../current-user/current-user"
 import * as SecureStore from "expo-secure-store"
 import { useQuery } from "../../utils/general"
 import { getAllPostsQuery } from "../../utils/queries"
+import { ProfileCardModel } from "../profile-card/profile-card"
 
 /**
  * Model description here for TypeScript hints.
@@ -18,7 +19,7 @@ export const UsersStoreModel = types
   })
   .extend(withEnvironment)
   .actions((self) => ({
-    saveUsers: (UserSnapshots: UserSnapshot[]) => {
+    saveUsers: (UserSnapshots: UserType[]) => {
       self.users.replace(UserSnapshots)
     },
   }))
@@ -26,12 +27,6 @@ export const UsersStoreModel = types
     getUsers: async () => {
       const users = mockUser
       self.saveUsers(users)
-    },
-  }))
-  .actions((self) => ({
-    getUsersFromServer: async () => {
-      const users = await useQuery(process.env.GQL_URL, getAllPostsQuery).then((res) => res.json())
-      console.log(await users)
     },
   }))
   .actions((self) => ({
