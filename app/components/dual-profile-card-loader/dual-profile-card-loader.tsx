@@ -75,7 +75,7 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
   const bringNewCard = (state: TState) => {
     setCardData((prevData) => {
       return prevData.map((card) => {
-        if (card.state == state) {
+        if (card.state === state) {
           return {
             ...card,
             translationX: withTiming(0),
@@ -89,7 +89,7 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
     setTimeout(() => {
       setCardData((prevData) => {
         return prevData.map((card) => {
-          if (state == "PREV") {
+          if (state === "PREV") {
             switch (card.state) {
               case "PREV":
                 return { ...card, state: "CURRENT", translationX: card.translationX }
@@ -100,7 +100,7 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
             }
           }
 
-          if (state == "NEXT") {
+          if (state === "NEXT") {
             switch (card.state) {
               case "NEXT":
                 return { ...card, state: "CURRENT", translationX: card.translationX }

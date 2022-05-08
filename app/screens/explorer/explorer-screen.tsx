@@ -23,7 +23,7 @@ export const ExplorerScreen = observer(function ExplorerScreen(props) {
 
   useEffect(() => {
     ;(async () => {
-      await profileCardStore.getProfileCards()
+      await profileCardStore.getPostsFromServer()
     })()
   }, [])
 

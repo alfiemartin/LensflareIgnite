@@ -52,12 +52,6 @@ export const ProfileScreen = observer(function ProfileScreen() {
     navigation.navigate("settings" as any)
   }
 
-  useEffect(() => {
-    ;(async () => {
-      await profileCardStore.getProfileCards()
-    })()
-  }, [])
-
   return (
     <Screen style={ROOT}>
       {profiles.length > 0 && (
