@@ -47,7 +47,7 @@ export async function setupRootStore() {
   }
 
   await rootStore.usersStore.getSavedUser()
-  // await rootStore.profileCardStore.getProfileCards()
+  // await rootStore.profileCardStore.getMockPosts()
   // await storage.clear()
 
   // await rootStore.usersStore.destorySavedUserFromKeychain()

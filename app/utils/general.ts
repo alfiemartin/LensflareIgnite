@@ -1,4 +1,7 @@
-export const useQuery = (url: string, query: string, variables?: {}) => {
+import { useTailwind } from "tailwind-rn"
+import { AnyObject } from "../types"
+
+export const useQuery = (url: string, query: string, variables?: AnyObject) => {
   return fetch(url, {
     method: "POST",
     headers: {
@@ -10,3 +13,5 @@ export const useQuery = (url: string, query: string, variables?: {}) => {
     }),
   })
 }
+
+export const tw = useTailwind

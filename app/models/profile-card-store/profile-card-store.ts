@@ -1,8 +1,9 @@
-import { getSnapshot, Instance, SnapshotOut, types } from "mobx-state-tree"
+import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { ProfileCard, ProfileCardModel, ProfileCardSnapshot } from "../profile-card/profile-card"
 import { mockProfileCardData } from "../../../mockData"
 import { getAllPostsQuery } from "../../utils/queries"
 import { useQuery } from "../../utils/general"
+import { Post } from "../../types"
 
 export const ProfileCardStoreModel = types
   .model("ProfileCardStore")
@@ -16,28 +17,15 @@ export const ProfileCardStoreModel = types
     },
   }))
   .actions((self) => ({
-    getProfileCards: async () => {
+    getMockPosts: async () => {
       const results = mockProfileCardData
 
       self.saveProfileCards(results)
     },
   }))
   .actions((self) => ({
-    popFirstProfile: () => {
-      const currentProfiles = getSnapshot(self).profiles
-      const poppedProfiles = currentProfiles.filter((_, i) => i !== 0)
-
-      if (poppedProfiles.length === 0) {
-        self.getProfileCards()
-        return
-      }
-
-      self.profiles.replace(poppedProfiles)
-    },
-  }))
-  .actions((self) => ({
     getPostsFromServer: async () => {
-      const users: { data: { getPosts: any[] } } = await useQuery(
+      const users: { data: { getPosts: Post[] } } = await useQuery(
         process.env.GQL_URL,
         getAllPostsQuery,
       ).then((res) => res.json())

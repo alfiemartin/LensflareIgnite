@@ -1,8 +1,8 @@
 import * as React from "react"
 import { Dimensions, StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { CardFooter, ProfileCard, TState } from ".."
-import { ProfileCardSnapshot, useStores } from "../../models"
+import { CardFooter, ProfileCard } from ".."
+import { useStores } from "../../models"
 import { useEffect, useState } from "react"
 import { PanGestureHandler } from "react-native-gesture-handler"
 import Animated, {
@@ -11,6 +11,7 @@ import Animated, {
   useAnimatedGestureHandler,
   withTiming,
 } from "react-native-reanimated"
+import { ICardState, SwipeState } from "../../types"
 
 const CONTAINER: ViewStyle = {
   justifyContent: "flex-end",
@@ -22,13 +23,6 @@ export interface DualProfileCardLoaderProps {
    * An optional style override useful for padding & margin.
    */
   style?: StyleProp<ViewStyle>
-}
-
-export interface ICardState {
-  counter: number
-  translationX: number
-  state: TState
-  data: ProfileCardSnapshot
 }
 
 /**
@@ -50,19 +44,19 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
       {
         counter: 0,
         translationX: -screenWidth,
-        state: "PREV",
+        state: SwipeState.PREV,
         data: profiles[0],
       },
       {
         counter: 0,
         translationX: 0,
-        state: "CURRENT",
+        state: SwipeState.CURRENT,
         data: profiles[0],
       },
       {
         counter: 1,
         translationX: screenWidth,
-        state: "NEXT",
+        state: SwipeState.NEXT,
         data: profiles[1],
       },
     ]
@@ -72,7 +66,10 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
 
   const screenWidth = Dimensions.get("screen").width
 
-  const bringNewCard = (state: TState) => {
+  /**
+   * Move a card to the center
+   */
+  const bringNewCard = (state: SwipeState) => {
     setCardData((prevData) => {
       return prevData.map((card) => {
         if (card.state === state) {
@@ -87,29 +84,29 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
     })
 
     setTimeout(() => {
-      setCardData((prevData) => {
+      setCardData((prevData: ICardState[]) => {
         return prevData.map((card) => {
-          if (state === "PREV") {
+          if (state === SwipeState.PREV) {
             switch (card.state) {
-              case "PREV":
-                return { ...card, state: "CURRENT", translationX: card.translationX }
-              case "NEXT":
-                return { ...card }
-              case "CURRENT":
-                return { ...card, state: "PREV", translationX: -screenWidth }
+              case SwipeState.PREV:
+                return { ...card, state: SwipeState.CURRENT }
+              case SwipeState.NEXT:
+                return card
+              default:
+                return { ...card, state: SwipeState.PREV, translationX: -screenWidth }
             }
           }
 
-          if (state === "NEXT") {
+          if (state === SwipeState.NEXT) {
             switch (card.state) {
-              case "NEXT":
-                return { ...card, state: "CURRENT", translationX: card.translationX }
-              case "PREV":
-                return { ...card }
-              case "CURRENT":
+              case SwipeState.NEXT:
+                return { ...card, state: SwipeState.CURRENT }
+              case SwipeState.PREV:
+                return card
+              default:
                 return {
                   ...card,
-                  state: "NEXT",
+                  state: SwipeState.NEXT,
                   translationX: screenWidth,
                   counter: card.counter + 2,
                   data: profiles[card.counter + 2],
@@ -127,12 +124,12 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
     setCardData((prevData) => {
       return prevData.map((card) => {
         switch (card.state) {
-          case "PREV":
+          case SwipeState.PREV:
             return {
               ...card,
               translationX: interpolate(translationX, [0, screenWidth], [-screenWidth, 0]),
             }
-          case "NEXT":
+          case SwipeState.NEXT:
             return {
               ...card,
               translationX: screenWidth,
@@ -148,12 +145,12 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
     setCardData((prevData) => {
       return prevData.map((card) => {
         switch (card.state) {
-          case "NEXT":
+          case SwipeState.NEXT:
             return {
               ...card,
               translationX: interpolate(translationX, [0, -screenWidth], [screenWidth, 0]),
             }
-          case "PREV":
+          case SwipeState.PREV:
             return {
               ...card,
               translationX: -screenWidth,
@@ -169,12 +166,12 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
     setCardData((prevData) => {
       return prevData.map((card) => {
         switch (card.state) {
-          case "PREV":
+          case SwipeState.PREV:
             return {
               ...card,
               translationX: withTiming(-screenWidth),
             }
-          case "NEXT":
+          case SwipeState.NEXT:
             return {
               ...card,
               translationX: withTiming(screenWidth),
@@ -200,14 +197,12 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
       const completeThreshold = 100
 
       if (ctx.transX > completeThreshold) {
-        runOnJS(bringNewCard)("PREV")
-        return
+        runOnJS(bringNewCard)(SwipeState.PREV)
       } else if (ctx.transX < -completeThreshold) {
-        runOnJS(bringNewCard)("NEXT")
-        return
+        runOnJS(bringNewCard)(SwipeState.NEXT)
+      } else {
+        runOnJS(translateCardsToDefault)()
       }
-
-      runOnJS(translateCardsToDefault)()
     },
   })
 

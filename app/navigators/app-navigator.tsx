@@ -64,7 +64,6 @@ export type OnboardingParamList = {
   register: undefined
 }
 
-// Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createNativeStackNavigator<StackNavigatorParamList>()
 const OnboardingStack_ = createNativeStackNavigator<OnboardingParamList>()
 const Tab = createMaterialTopTabNavigator<TabNavigatorParamList>()
@@ -170,7 +169,8 @@ export const AppNavigator = observer(function AppNavigator(props: NavigationProp
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
       {...props}
     >
-      {usersStore?.currentUser?.sessionId ? <AppStack /> : <OnboardingStack />}
+      {/* {usersStore?.currentUser?.sessionId ? <AppStack /> : <OnboardingStack />} */}
+      <AppStack />
     </NavigationContainer>
   )
 })

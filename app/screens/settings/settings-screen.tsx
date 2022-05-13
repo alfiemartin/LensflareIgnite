@@ -2,8 +2,6 @@ import React from "react"
 import { observer } from "mobx-react-lite"
 import { Button, ViewStyle } from "react-native"
 import { ClearStorageButton, Screen, Text } from "../../components"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
 import { color } from "../../theme"
 import { useStores } from "../../models"
 

@@ -1,20 +1,9 @@
 import React from "react"
 import { ImageBackground, StyleProp, ViewStyle, ImageStyle, Text, Keyboard } from "react-native"
 import { observer } from "mobx-react-lite"
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  WithTimingConfig,
-} from "react-native-reanimated"
+import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated"
 import { useEffect } from "react"
-import { ICardState } from ".."
-
-export interface IUpdateCardUI {
-  cardId: number
-  onlyScale: boolean
-}
-
-export type TState = "PREV" | "NEXT" | "CURRENT"
+import { ICardState, SwipeState } from "../../types"
 
 export interface ProfileCardProps {
   /**
@@ -23,7 +12,7 @@ export interface ProfileCardProps {
   style?: StyleProp<ViewStyle>
   data: ICardState
   cardId?: number
-  state: TState
+  state: SwipeState
 }
 
 const CONTAINER: ViewStyle = {
@@ -49,13 +38,6 @@ const MAIN_IMAGE: ImageStyle = {
   backgroundColor: "#fce7f3",
 }
 
-const aSwipeConfig: WithTimingConfig = {
-  duration: 300,
-}
-const instantTiming: WithTimingConfig = {
-  duration: 0,
-}
-
 export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps) {
   const { style, data, state } = props
   const styles = Object.assign({}, CONTAINER, style)
@@ -79,14 +61,16 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
   return (
     <Animated.View
       onTouchStart={() => Keyboard.dismiss()}
-      style={[styles, aSwipeStyles, { zIndex: state == "CURRENT" ? 5 : 10 }]}
+      style={[styles, aSwipeStyles, { zIndex: state == SwipeState.CURRENT ? 5 : 10 }]}
     >
       <ImageBackground
         source={{ uri: data?.data?.image }}
         style={MAIN_IMAGE_CONTAINER}
         imageStyle={MAIN_IMAGE}
       >
-        <Text style={{ marginLeft: "auto", fontSize: 28 }}>{state}</Text>
+        <Text style={{ marginLeft: "auto", fontSize: 28 }}>
+          {state == SwipeState.PREV ? "Prev" : state == SwipeState.NEXT ? "Next" : "Current"}
+        </Text>
       </ImageBackground>
     </Animated.View>
   )
